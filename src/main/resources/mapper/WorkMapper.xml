@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.portfolio.mapper.WorkMapper">
+
+    <resultMap id="WorkResultMap" type="com.example.portfolio.entity.Work">
+        <id property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="techStack" column="tech_stack"/>
+        <result property="description" column="description"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+        <result property="url" column="url"/>
+    </resultMap>
+
+    <select id="findAll" resultMap="WorkResultMap">
+        SELECT id, title, description, tech_stack, created_at, updated_at, url
+        FROM work
+    </select>
+
+    <select id="findById" parameterType="long" resultMap="WorkResultMap">
+        SELECT id, title, description, tech_stack, created_at, updated_at, url
+        FROM work
+        WHERE id = #{id}
+    </select>
+
+    <insert id="insert" parameterType="com.example.portfolio.request.WorkCreateRequest" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO work (title, description, tech_stack, url, created_at, updated_at)
+        VALUES (#{title}, #{description}, #{techStack}, #{url}, now(), now())
+    </insert>
+
+    <update id="update" parameterType="com.example.portfolio.request.WorkCreateRequest">
+        UPDATE work
+        SET title=#{title},
+        description=#{description},
+        tech_stack=#{techStack},
+        url=#{url},
+        updated_at=now()
+        WHERE id=#{id}
+    </update>
+
+    <delete id="delete" parameterType="long">
+        DELETE FROM work WHERE id=#{id}
+    </delete>
+
+</mapper>

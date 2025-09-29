@@ -1,7 +1,9 @@
 CREATE TABLE "user" (
     id SERIAL PRIMARY KEY,
     username VARCHAR(255) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL
+    password VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE profile (
@@ -12,7 +14,9 @@ CREATE TABLE profile (
     intro VARCHAR(255),
     bio TEXT,
     mail VARCHAR(255),
-    github VARCHAR(255)
+    github VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE hobby (

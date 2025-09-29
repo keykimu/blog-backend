@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.portfolio.mapper.ProfileMapper">
+
+    <resultMap id="ProfileResultMap" type="com.example.portfolio.entity.Profile">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="nickname" column="nickname"/>
+        <result property="nameEn" column="name_en"/>
+        <result property="intro" column="intro"/>
+        <result property="bio" column="bio"/>
+        <result property="mail" column="mail"/>
+        <result property="github" column="github"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <select id="find" resultMap="ProfileResultMap">
+        SELECT id, name, nickname, name_en, intro, bio, mail, github, created_at, updated_at
+        FROM profile
+        LIMIT 1
+    </select>
+
+    <update id="update" parameterType="com.example.portfolio.entity.Profile">
+        UPDATE profile
+        SET name=#{name},
+        nickname=#{nickname},
+        name_en=#{nameEn},
+        intro=#{intro},
+        bio=#{bio},
+        mail=#{mail},
+        github=#{github},
+        updated_at=now()
+        WHERE id=#{id}
+    </update>
+
+</mapper>

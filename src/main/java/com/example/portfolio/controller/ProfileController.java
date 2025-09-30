@@ -5,10 +5,9 @@ import com.example.portfolio.response.ProfileResponse;
 import com.example.portfolio.service.ProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @RequestMapping("/api/profile")
 @RequiredArgsConstructor
 public class ProfileController {

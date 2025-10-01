@@ -1,0 +1,14 @@
+package com.example.portfolio.entity;
+
+import lombok.Data;
+
+import java.time.LocalDateTime;
+
+@Data
+public class Event {
+    private Long id;
+    private String year;
+    private String name;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+}

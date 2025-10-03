@@ -9,8 +9,6 @@ import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring")
 public interface CertificateEntityMapper {
-    CertificateEntityMapper INSTANCE = Mappers.getMapper(CertificateEntityMapper.class);
-
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)

@@ -10,8 +10,6 @@ import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring")
 public interface WorkEntityMapper {
-    WorkEntityMapper INSTANCE = Mappers.getMapper(WorkEntityMapper.class);
-
     WorkResponse toResponse(Work work);
 
     @Mapping(target = "id", ignore = true)

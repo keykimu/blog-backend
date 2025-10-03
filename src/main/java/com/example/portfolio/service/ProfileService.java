@@ -16,14 +16,14 @@ public class ProfileService {
 
     public ProfileResponse getProfile() {
         Profile entity = profileMapper.find();
-        return profileEntityMapper.INSTANCE.toResponse(entity);
+        return profileEntityMapper.toResponse(entity);
     }
 
     public ProfileResponse updateProfile(Long id, ProfileUpdateRequest request) {
-        Profile entity = profileEntityMapper.INSTANCE.toEntity(request);
+        Profile entity = profileEntityMapper.toEntity(request);
         entity.setId(id);
         profileMapper.update(entity);
         Profile updated = profileMapper.find();
-        return profileEntityMapper.INSTANCE.toResponse(updated);
+        return profileEntityMapper.toResponse(updated);
     }
 }

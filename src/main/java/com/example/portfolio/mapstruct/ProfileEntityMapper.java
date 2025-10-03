@@ -9,8 +9,6 @@ import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel="spring")
 public interface ProfileEntityMapper {
-    ProfileEntityMapper INSTANCE = Mappers.getMapper(ProfileEntityMapper.class);
-
     ProfileResponse toResponse(Profile entity);
 
     @Mapping(target = "id", ignore = true)

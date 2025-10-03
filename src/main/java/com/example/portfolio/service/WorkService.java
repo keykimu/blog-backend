@@ -19,20 +19,20 @@ public class WorkService {
 
     public List<WorkResponse> getAllWorks() {
         return workMapper.findAll().stream()
-                .map(workEntityMapper.INSTANCE::toResponse)
+                .map(workEntityMapper::toResponse)
                 .collect(Collectors.toList());
     }
 
     public WorkResponse getWork(Long id) {
         Work work = workMapper.findById(id);
-        return workEntityMapper.INSTANCE.toResponse(work);
+        return workEntityMapper.toResponse(work);
     }
 
     public WorkResponse createWork(WorkCreateRequest request) {
         Work entity = workEntityMapper.toEntity(request);
         workMapper.insert(entity);
         Work work = workMapper.findById(entity.getId());
-        return workEntityMapper.INSTANCE.toResponse(work);
+        return workEntityMapper.toResponse(work);
     }
 
     public WorkResponse updateWork(Long id,WorkUpdateRequest request) {
@@ -40,7 +40,7 @@ public class WorkService {
         Work entity = workEntityMapper.toEntity(request);
         workMapper.update(entity);
         Work work = workMapper.findById(entity.getId());
-        return workEntityMapper.INSTANCE.toResponse(work);
+        return workEntityMapper.toResponse(work);
     }
 
     public boolean deleteWork(Long id) {

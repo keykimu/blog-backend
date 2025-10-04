@@ -3,6 +3,10 @@ package com.example.portfolio.controller;
 import com.example.portfolio.request.wrap.CertificateListRequest;
 import com.example.portfolio.response.CertificateResponse;
 import com.example.portfolio.service.CertificateService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -12,15 +16,28 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/certificates")
+@Tag(name = "Certificate", description = "資格情報 API")
 @RequiredArgsConstructor
 public class CertificateController {
     private final CertificateService certificateService;
 
+    @Operation(summary = "資格を取得")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "取得成功"),
+            @ApiResponse(responseCode = "400", description = "バリデーションエラー"),
+            @ApiResponse(responseCode = "500", description = "サーバーエラー")
+    })
     @GetMapping
     public ResponseEntity<List<CertificateResponse>> getAll() {
         return ResponseEntity.ok(certificateService.getAll());
     }
 
+    @Operation(summary = "資格をまとめて登録")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "登録成功"),
+            @ApiResponse(responseCode = "400", description = "バリデーションエラー"),
+            @ApiResponse(responseCode = "500", description = "サーバーエラー")
+    })
     @PostMapping
     public ResponseEntity<List<CertificateResponse>> saveAll(@Valid @RequestBody CertificateListRequest requests) {
         return ResponseEntity.ok(certificateService.saveAll(requests));

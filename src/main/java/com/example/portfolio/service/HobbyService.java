@@ -8,6 +8,7 @@ import com.example.portfolio.request.wrap.HobbyListRequest;
 import com.example.portfolio.response.HobbyResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -24,6 +25,7 @@ public class HobbyService {
                 .toList();
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public List<HobbyResponse> createHobby(HobbyListRequest request) {
         hobbyMapper.deleteAll();
         for(HobbyCreateRequest req: request.getHobbies()){

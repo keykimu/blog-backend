@@ -7,6 +7,7 @@ import com.example.portfolio.request.wrap.FrameworkListRequest;
 import com.example.portfolio.response.FrameworkResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -21,6 +22,7 @@ public class FrameworkService {
         return frameworkEntityMapper.toResponseList(list);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public List<FrameworkResponse> saveAll(FrameworkListRequest requests) {
         frameworkMapper.deleteAll();
         List<Framework> entities = frameworkEntityMapper.toEntityList(requests.getFrameworks());

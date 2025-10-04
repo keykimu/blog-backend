@@ -7,6 +7,7 @@ import com.example.portfolio.request.ProfileUpdateRequest;
 import com.example.portfolio.response.ProfileResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +20,7 @@ public class ProfileService {
         return profileEntityMapper.toResponse(entity);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public ProfileResponse updateProfile(Long id, ProfileUpdateRequest request) {
         Profile entity = profileEntityMapper.toEntity(request);
         entity.setId(id);

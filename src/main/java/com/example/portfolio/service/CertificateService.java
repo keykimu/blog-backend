@@ -8,6 +8,7 @@ import com.example.portfolio.request.CertificateRequest;
 import com.example.portfolio.response.CertificateResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,6 +26,7 @@ public class CertificateService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public List<CertificateResponse> saveAll(CertificateListRequest requests) {
         certificateMapper.deleteAll();
         for (CertificateRequest req : requests.getCertificates()) {

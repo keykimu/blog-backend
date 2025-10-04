@@ -8,6 +8,7 @@ import com.example.portfolio.request.CareerRequest;
 import com.example.portfolio.response.CareerResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,6 +25,7 @@ public class CareerService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public List<CareerResponse> saveAll(CareerListRequest requests) {
         // 既存データを削除
         careerMapper.deleteAll();

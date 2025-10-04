@@ -7,6 +7,7 @@ import com.example.portfolio.request.OtherSkillRequest;
 import com.example.portfolio.response.OtherSkillResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -21,6 +22,7 @@ public class OtherSkillService {
         return otherSkillEntityMapper.toResponseList(otherSkillMapper.findAll());
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public List<OtherSkillResponse> saveAll(OtherSkillListRequest requests) {
         // 一旦全削除
         otherSkillMapper.deleteAll();

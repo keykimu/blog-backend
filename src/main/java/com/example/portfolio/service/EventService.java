@@ -8,6 +8,7 @@ import com.example.portfolio.request.EventRequest;
 import com.example.portfolio.response.EventResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -21,6 +22,7 @@ public class EventService {
         return eventEntityMapper.toResponseList(eventMapper.findAll());
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public List<EventResponse> saveAll(EventListRequest requests) {
         // 全削除
         eventMapper.deleteAll();

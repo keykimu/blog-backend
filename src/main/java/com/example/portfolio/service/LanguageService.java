@@ -8,6 +8,7 @@ import com.example.portfolio.request.LanguageRequest;
 import com.example.portfolio.response.LanguageResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -22,6 +23,7 @@ public class LanguageService {
         return languageEntityMapper.toResponseList(languageMapper.findAll());
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public List<LanguageResponse> saveAll(LanguageListRequest requests) {
         languageMapper.deleteAll();
 

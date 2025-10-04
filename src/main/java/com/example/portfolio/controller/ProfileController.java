@@ -3,6 +3,7 @@ package com.example.portfolio.controller;
 import com.example.portfolio.request.ProfileUpdateRequest;
 import com.example.portfolio.response.ProfileResponse;
 import com.example.portfolio.service.ProfileService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ public class ProfileController {
     @PutMapping("/{id}")
     public ResponseEntity<ProfileResponse> updateProfile(
             @PathVariable Long id,
-            @RequestBody ProfileUpdateRequest request) {
+            @Valid @RequestBody ProfileUpdateRequest request) {
         return ResponseEntity.ok(profileService.updateProfile(id, request));
     }
 }

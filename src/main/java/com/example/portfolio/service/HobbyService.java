@@ -4,6 +4,7 @@ import com.example.portfolio.entity.Hobby;
 import com.example.portfolio.mapper.HobbyMapper;
 import com.example.portfolio.mapstruct.HobbyEntityMapper;
 import com.example.portfolio.request.HobbyCreateRequest;
+import com.example.portfolio.request.wrap.HobbyListRequest;
 import com.example.portfolio.response.HobbyResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,9 +24,9 @@ public class HobbyService {
                 .toList();
     }
 
-    public List<HobbyResponse> createHobby(List<HobbyCreateRequest> request) {
+    public List<HobbyResponse> createHobby(HobbyListRequest request) {
         hobbyMapper.deleteAll();
-        for(HobbyCreateRequest req: request){
+        for(HobbyCreateRequest req: request.getHobbies()){
             Hobby entity = hobbyEntityMapper.toEntity(req);
             hobbyMapper.insert(entity);
         }

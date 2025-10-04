@@ -1,8 +1,9 @@
 package com.example.portfolio.controller;
 
-import com.example.portfolio.request.EventRequest;
+import com.example.portfolio.request.wrap.EventListRequest;
 import com.example.portfolio.response.EventResponse;
 import com.example.portfolio.service.EventService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ public class EventController {
     }
 
     @PostMapping
-    public ResponseEntity<List<EventResponse>> saveAll(@RequestBody List<EventRequest> requests) {
+    public ResponseEntity<List<EventResponse>> saveAll(@Valid @RequestBody EventListRequest requests) {
         return ResponseEntity.ok(eventService.saveAll(requests));
     }
 }

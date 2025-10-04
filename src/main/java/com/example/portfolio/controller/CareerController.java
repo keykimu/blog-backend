@@ -1,8 +1,9 @@
 package com.example.portfolio.controller;
 
-import com.example.portfolio.request.CareerRequest;
+import com.example.portfolio.request.wrap.CareerListRequest;
 import com.example.portfolio.response.CareerResponse;
 import com.example.portfolio.service.CareerService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ public class CareerController {
     }
 
     @PostMapping
-    public ResponseEntity<List<CareerResponse>> saveAll(@RequestBody List<CareerRequest> requests) {
+    public ResponseEntity<List<CareerResponse>> saveAll(@Valid @RequestBody CareerListRequest requests) {
         return ResponseEntity.ok(careerService.saveAll(requests));
     }
 }

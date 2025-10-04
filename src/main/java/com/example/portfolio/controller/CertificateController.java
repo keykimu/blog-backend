@@ -1,8 +1,9 @@
 package com.example.portfolio.controller;
 
-import com.example.portfolio.request.CertificateRequest;
+import com.example.portfolio.request.wrap.CertificateListRequest;
 import com.example.portfolio.response.CertificateResponse;
 import com.example.portfolio.service.CertificateService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ public class CertificateController {
     }
 
     @PostMapping
-    public ResponseEntity<List<CertificateResponse>> saveAll(@RequestBody List<CertificateRequest> requests) {
+    public ResponseEntity<List<CertificateResponse>> saveAll(@Valid @RequestBody CertificateListRequest requests) {
         return ResponseEntity.ok(certificateService.saveAll(requests));
     }
 }

@@ -1,8 +1,9 @@
 package com.example.portfolio.controller;
 
-import com.example.portfolio.request.LanguageRequest;
+import com.example.portfolio.request.wrap.LanguageListRequest;
 import com.example.portfolio.response.LanguageResponse;
 import com.example.portfolio.service.LanguageService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +23,7 @@ public class LanguageController {
     }
 
     @PostMapping
-    public ResponseEntity<List<LanguageResponse>> saveAll(@RequestBody List<LanguageRequest> requests) {
+    public ResponseEntity<List<LanguageResponse>> saveAll(@Valid @RequestBody LanguageListRequest requests) {
         return ResponseEntity.ok(languageService.saveAll(requests));
     }
 }

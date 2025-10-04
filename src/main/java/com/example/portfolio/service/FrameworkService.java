@@ -3,7 +3,7 @@ package com.example.portfolio.service;
 import com.example.portfolio.entity.Framework;
 import com.example.portfolio.mapper.FrameworkMapper;
 import com.example.portfolio.mapstruct.FrameworkEntityMapper;
-import com.example.portfolio.request.FrameworkCreateRequest;
+import com.example.portfolio.request.wrap.FrameworkListRequest;
 import com.example.portfolio.response.FrameworkResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,9 +21,9 @@ public class FrameworkService {
         return frameworkEntityMapper.toResponseList(list);
     }
 
-    public List<FrameworkResponse> saveAll(List<FrameworkCreateRequest> requests) {
+    public List<FrameworkResponse> saveAll(FrameworkListRequest requests) {
         frameworkMapper.deleteAll();
-        List<Framework> entities = frameworkEntityMapper.toEntityList(requests);
+        List<Framework> entities = frameworkEntityMapper.toEntityList(requests.getFrameworks());
         for (Framework entity : entities) {
             frameworkMapper.insert(entity);
         }

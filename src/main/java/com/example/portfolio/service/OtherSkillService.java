@@ -2,6 +2,7 @@ package com.example.portfolio.service;
 
 import com.example.portfolio.mapper.OtherSkillMapper;
 import com.example.portfolio.mapperstruct.OtherSkillEntityMapper;
+import com.example.portfolio.request.wrap.OtherSkillListRequest;
 import com.example.portfolio.request.OtherSkillRequest;
 import com.example.portfolio.response.OtherSkillResponse;
 import lombok.RequiredArgsConstructor;
@@ -20,12 +21,12 @@ public class OtherSkillService {
         return otherSkillEntityMapper.toResponseList(otherSkillMapper.findAll());
     }
 
-    public List<OtherSkillResponse> saveAll(List<OtherSkillRequest> requests) {
+    public List<OtherSkillResponse> saveAll(OtherSkillListRequest requests) {
         // 一旦全削除
         otherSkillMapper.deleteAll();
 
         // 挿入
-        for (OtherSkillRequest req : requests) {
+        for (OtherSkillRequest req : requests.getOtherSkills()) {
             otherSkillMapper.insert(otherSkillEntityMapper.toEntity(req));
         }
 

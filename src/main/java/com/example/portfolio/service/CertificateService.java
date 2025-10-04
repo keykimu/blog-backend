@@ -3,6 +3,7 @@ package com.example.portfolio.service;
 import com.example.portfolio.entity.Certificate;
 import com.example.portfolio.mapper.CertificateMapper;
 import com.example.portfolio.mapstruct.CertificateEntityMapper;
+import com.example.portfolio.request.wrap.CertificateListRequest;
 import com.example.portfolio.request.CertificateRequest;
 import com.example.portfolio.response.CertificateResponse;
 import lombok.RequiredArgsConstructor;
@@ -24,9 +25,9 @@ public class CertificateService {
                 .collect(Collectors.toList());
     }
 
-    public List<CertificateResponse> saveAll(List<CertificateRequest> requests) {
+    public List<CertificateResponse> saveAll(CertificateListRequest requests) {
         certificateMapper.deleteAll();
-        for (CertificateRequest req : requests) {
+        for (CertificateRequest req : requests.getCertificates()) {
             Certificate entity = certificateEntityMapper.toEntity(req);
             certificateMapper.insert(entity);
         }

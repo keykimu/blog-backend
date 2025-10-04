@@ -4,6 +4,7 @@ import com.example.portfolio.request.WorkCreateRequest;
 import com.example.portfolio.request.WorkUpdateRequest;
 import com.example.portfolio.response.WorkResponse;
 import com.example.portfolio.service.WorkService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,13 +35,13 @@ public class WorkController {
     }
 
     @PostMapping
-    public ResponseEntity<WorkResponse> create(@RequestBody WorkCreateRequest request) {
+    public ResponseEntity<WorkResponse> create(@Valid @RequestBody WorkCreateRequest request) {
         WorkResponse createdWork = workService.createWork(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdWork);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<WorkResponse> update(@PathVariable Long id, @RequestBody WorkUpdateRequest request) {
+    public ResponseEntity<WorkResponse> update(@PathVariable Long id, @Valid @RequestBody WorkUpdateRequest request) {
         WorkResponse updatedWork = workService.updateWork(id, request);
         if (updatedWork != null) {
             return ResponseEntity.ok(updatedWork);

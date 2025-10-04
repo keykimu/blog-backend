@@ -1,9 +1,10 @@
 package com.example.portfolio.controller;
 
 
-import com.example.portfolio.request.HobbyCreateRequest;
+import com.example.portfolio.request.wrap.HobbyListRequest;
 import com.example.portfolio.response.HobbyResponse;
 import com.example.portfolio.service.HobbyService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,7 @@ public class HobbyController {
     }
 
     @PostMapping
-    public ResponseEntity<List<HobbyResponse>> create(@RequestBody List<HobbyCreateRequest> request) {
+    public ResponseEntity<List<HobbyResponse>> create(@Valid @RequestBody HobbyListRequest request) {
         List<HobbyResponse> created = hobbyService.createHobby(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }

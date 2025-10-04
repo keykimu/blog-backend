@@ -3,6 +3,7 @@ package com.example.portfolio.service;
 import com.example.portfolio.entity.Career;
 import com.example.portfolio.mapstruct.CareerEntityMapper;
 import com.example.portfolio.mapper.CareerMapper;
+import com.example.portfolio.request.wrap.CareerListRequest;
 import com.example.portfolio.request.CareerRequest;
 import com.example.portfolio.response.CareerResponse;
 import lombok.RequiredArgsConstructor;
@@ -23,12 +24,12 @@ public class CareerService {
                 .collect(Collectors.toList());
     }
 
-    public List<CareerResponse> saveAll(List<CareerRequest> requests) {
+    public List<CareerResponse> saveAll(CareerListRequest requests) {
         // 既存データを削除
         careerMapper.deleteAll();
 
         // 新規追加
-        for (CareerRequest req : requests) {
+        for (CareerRequest req : requests.getCareers()) {
             Career entity = mapper.toEntity(req);
             careerMapper.insert(entity);
         }

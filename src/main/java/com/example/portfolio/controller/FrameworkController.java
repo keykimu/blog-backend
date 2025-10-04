@@ -1,8 +1,9 @@
 package com.example.portfolio.controller;
 
-import com.example.portfolio.request.FrameworkCreateRequest;
+import com.example.portfolio.request.wrap.FrameworkListRequest;
 import com.example.portfolio.response.FrameworkResponse;
 import com.example.portfolio.service.FrameworkService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ public class FrameworkController {
     }
 
     @PostMapping
-    public ResponseEntity<List<FrameworkResponse>> saveAll(@RequestBody List<FrameworkCreateRequest> requests) {
+    public ResponseEntity<List<FrameworkResponse>> saveAll(@Valid @RequestBody FrameworkListRequest requests) {
         return ResponseEntity.ok(frameworkService.saveAll(requests));
     }
 }

@@ -1,8 +1,9 @@
 package com.example.portfolio.controller;
 
-import com.example.portfolio.request.OtherSkillRequest;
+import com.example.portfolio.request.wrap.OtherSkillListRequest;
 import com.example.portfolio.response.OtherSkillResponse;
 import com.example.portfolio.service.OtherSkillService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ public class OtherSkillController {
     }
 
     @PostMapping
-    public ResponseEntity<List<OtherSkillResponse>> saveAll(@RequestBody List<OtherSkillRequest> requests) {
+    public ResponseEntity<List<OtherSkillResponse>> saveAll(@Valid @RequestBody OtherSkillListRequest requests) {
         return ResponseEntity.ok(otherSkillService.saveAll(requests));
     }
 }

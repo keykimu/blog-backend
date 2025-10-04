@@ -1,9 +1,9 @@
 package com.example.portfolio.service;
 
-import com.example.portfolio.entity.Career;
 import com.example.portfolio.entity.Language;
 import com.example.portfolio.mapper.LanguageMapper;
 import com.example.portfolio.mapstruct.LanguageEntityMapper;
+import com.example.portfolio.request.wrap.LanguageListRequest;
 import com.example.portfolio.request.LanguageRequest;
 import com.example.portfolio.response.LanguageResponse;
 import lombok.RequiredArgsConstructor;
@@ -22,10 +22,10 @@ public class LanguageService {
         return languageEntityMapper.toResponseList(languageMapper.findAll());
     }
 
-    public List<LanguageResponse> saveAll(List<LanguageRequest> requests) {
+    public List<LanguageResponse> saveAll(LanguageListRequest requests) {
         languageMapper.deleteAll();
 
-        for (LanguageRequest req : requests) {
+        for (LanguageRequest req : requests.getLanguages()) {
             Language entity = languageEntityMapper.toEntity(req);
             languageMapper.insert(entity);
         }

@@ -2,9 +2,12 @@ package com.example.portfolio.controller;
 
 import com.example.portfolio.request.WorkCreateRequest;
 import com.example.portfolio.request.WorkUpdateRequest;
+import com.example.portfolio.response.ApiErrorResponse;
 import com.example.portfolio.response.WorkResponse;
 import com.example.portfolio.service.WorkService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -26,8 +29,12 @@ public class WorkController {
     @Operation(summary = "成果物をまとめて取得")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "取得成功"),
-            @ApiResponse(responseCode = "400", description = "バリデーションエラー"),
-            @ApiResponse(responseCode = "500", description = "サーバーエラー")
+            @ApiResponse(responseCode = "400", description = "バリデーションエラー",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
+            ),
+            @ApiResponse(responseCode = "500", description = "サーバーエラー",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
+            )
     })
     @GetMapping
     public ResponseEntity<List<WorkResponse>> getAll() {
@@ -38,8 +45,12 @@ public class WorkController {
     @Operation(summary = "成果物を取得")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "取得成功"),
-            @ApiResponse(responseCode = "404", description = "バリデーションエラー"),
-            @ApiResponse(responseCode = "500", description = "サーバーエラー")
+            @ApiResponse(responseCode = "404", description = "バリデーションエラー",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
+            ),
+            @ApiResponse(responseCode = "500", description = "サーバーエラー",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
+            )
     })
     @GetMapping("/{id}")
     public ResponseEntity<WorkResponse> getById(@PathVariable Long id) {
@@ -54,8 +65,12 @@ public class WorkController {
     @Operation(summary = "成果物を作成")
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "取得作成"),
-            @ApiResponse(responseCode = "400", description = "バリデーションエラー"),
-            @ApiResponse(responseCode = "500", description = "サーバーエラー")
+            @ApiResponse(responseCode = "400", description = "バリデーションエラー",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
+            ),
+            @ApiResponse(responseCode = "500", description = "サーバーエラー",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
+            )
     })
     @PostMapping
     public ResponseEntity<WorkResponse> create(@Valid @RequestBody WorkCreateRequest request) {
@@ -66,8 +81,15 @@ public class WorkController {
     @Operation(summary = "成果物を更新")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "更新成功"),
-            @ApiResponse(responseCode = "404", description = "バリデーションエラー"),
-            @ApiResponse(responseCode = "500", description = "サーバーエラー")
+            @ApiResponse(responseCode = "400", description = "バリデーションエラー",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
+            ),
+            @ApiResponse(responseCode = "404", description = "対象が存在しない",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
+            ),
+            @ApiResponse(responseCode = "500", description = "サーバーエラー",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
+            )
     })
     @PutMapping("/{id}")
     public ResponseEntity<WorkResponse> update(@PathVariable Long id, @Valid @RequestBody WorkUpdateRequest request) {
@@ -82,8 +104,15 @@ public class WorkController {
     @Operation(summary = "成果物を削除")
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "削除成功"),
-            @ApiResponse(responseCode = "404", description = "指定IDの成果物が存在しない"),
-            @ApiResponse(responseCode = "500", description = "サーバーエラー")
+            @ApiResponse(responseCode = "400", description = "バリデーションエラー",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
+            ),
+            @ApiResponse(responseCode = "404", description = "対象が存在しない",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
+            ),
+            @ApiResponse(responseCode = "500", description = "サーバーエラー",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
+            )
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {

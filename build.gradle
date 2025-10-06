@@ -31,14 +31,22 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-
-	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.5'
 	runtimeOnly 'org.postgresql:postgresql:42.6.0'
 
+	// Mybatis
+	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.5'
+
+	// MapStruct
 	implementation 'org.mapstruct:mapstruct:1.6.3'
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.6.3'
 
+	// OpenAPI + Swagger
 	implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.13"
+
+	// JWT
+	implementation 'com.auth0:java-jwt:4.2.1'
+	// パスワードハッシュ用
+	implementation 'org.springframework.security:spring-security-crypto:5.8.14'
 }
 
 tasks.named('test') {

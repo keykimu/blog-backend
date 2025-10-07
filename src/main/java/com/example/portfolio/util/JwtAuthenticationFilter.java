@@ -1,0 +1,80 @@
+package com.example.portfolio.util;
+
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.NonNull;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
+import java.io.IOException;
+
+@Component
+public class JwtAuthenticationFilter extends OncePerRequestFilter {
+
+    private final JwtUtil jwtUtil;
+
+    public JwtAuthenticationFilter(JwtUtil jwtUtil) {
+        this.jwtUtil = jwtUtil;
+    }
+
+    @Override
+    protected void doFilterInternal(
+            @NonNull HttpServletRequest request,
+            @NonNull HttpServletResponse response,
+            @NonNull FilterChain filterChain
+    ) throws ServletException, IOException {
+
+        String path = request.getRequestURI();
+        String method = request.getMethod();
+
+        // 認証不要なパスを除外
+        if (isPublicEndpoint(path, method)) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        // 認証が必要な場合
+        String authHeader = request.getHeader("Authorization");
+
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            unauthorized(response, "認証トークンが必要です");
+            return;
+        }
+
+        String token = authHeader.substring(7);
+
+        try {
+            jwtUtil.validateToken(token); // 有効期限・署名などを検証
+            filterChain.doFilter(request, response); // OK → 次へ
+        } catch (Exception ex) {
+            unauthorized(response, ex.getMessage());
+        }
+    }
+
+    /** 公開エンドポイント判定 */
+    private boolean isPublicEndpoint(String path, String method) {
+        // 認証不要API一覧
+        if (path.startsWith("/api/auth/login")) return true;
+        if (method.equalsIgnoreCase("GET")) {
+            return path.startsWith("/api/languages")
+                    || path.startsWith("/api/other-skills")
+                    || path.startsWith("/api/profile")
+                    || path.startsWith("/api/frameworks")
+                    || path.startsWith("/api/hobby")
+                    || path.startsWith("/api/works")
+                    || path.startsWith("/api/certificates")
+                    || path.startsWith("/api/events")
+                    || path.startsWith("/api/careers");
+        }
+        return false;
+    }
+
+    /** 認証失敗レスポンス */
+    private void unauthorized(HttpServletResponse response, String message) throws IOException {
+        response.setStatus(HttpStatus.UNAUTHORIZED.value());
+        response.setContentType("application/json; charset=UTF-8");
+        response.getWriter().write("{\"status\":401, \"message\":\"" + message + "\"}");
+    }
+}

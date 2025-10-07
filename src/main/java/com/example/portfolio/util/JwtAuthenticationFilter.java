@@ -29,6 +29,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String path = request.getRequestURI();
         String method = request.getMethod();
 
+        // Swagger UI と OpenAPI を除外
+        if (path.startsWith("/swagger-ui") || path.startsWith("/v3/api-docs")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
         // 認証不要なパスを除外
         if (isPublicEndpoint(path, method)) {
             filterChain.doFilter(request, response);

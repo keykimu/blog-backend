@@ -10,6 +10,7 @@ Vue + TypeScript で作られたフロントエンド（管理者ページ・公
 - データベース: PostgreSQL 15 (Docker)
 - ORM / DB マッピング: MyBatis 3.0.5
 - DTO マッピング: MapStruct 1.6.3
+- 認証: JWT (JSON Web Token)
 - コード簡略化: Lombok
 - API ドキュメント: Springdoc OpenAPI 2.8.13 + Swagger UI
 - コンテナ管理: Docker, docker-compose

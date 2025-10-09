@@ -89,7 +89,7 @@ CREATE TABLE work (
 );
 
 INSERT INTO "user" (username, password) VALUES
-('admin','$2a$08$mELZ4fCCdV09zRm8DmZIYutbJzXGYYWywyiidv4w7Ue81y1YNioXm');
+('developer','$2a$08$F71Pv0s0EEzNnY/kBSeekuHAgqW20m9FGh0fFnYXQ8/cnpJ.AdzeS');
 
 INSERT INTO profile (name, nickname, name_en, intro, bio, mail, github) VALUES
 ('木村勇紀', 'kimu', 'Yuki Kimura', '駆け出しエンジニア', '東京のIT企業に勤めています。Javaを中心にバックエンドの開発をしてきましたが、最近はVue、TypeScriptを使用したフロントエンドの開発もしています。詳しいスキルや経験はヘッダーのスキルを見てください。ポートフォリオ兼、今後制作するであろう成果物をまとめるために制作しました。', 'keykimu1999@gmail.com', 'https://github.com/keykimu');

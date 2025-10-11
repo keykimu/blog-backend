@@ -17,7 +17,6 @@ public interface WorkEntityMapper {
     @Mapping(target = "updatedAt", ignore = true)
     Work toEntity(WorkCreateRequest request);
 
-    @Mapping(target = "id", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     Work toEntity(WorkUpdateRequest request);

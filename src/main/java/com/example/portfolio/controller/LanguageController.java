@@ -19,7 +19,7 @@ import java.util.List;
 
 @RestController
 @Tag(name = "Language", description = "言語情報 API")
-@RequestMapping("/api/languages")
+@RequestMapping("/api/admin/languages")
 @RequiredArgsConstructor
 public class LanguageController {
 

@@ -19,7 +19,7 @@ import java.util.List;
 
 @RestController
 @Tag(name = "Event", description = "イベント情報 API")
-@RequestMapping("/api/events")
+@RequestMapping("/api/admin/events")
 @RequiredArgsConstructor
 public class EventController {
     private final EventService eventService;

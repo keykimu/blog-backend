@@ -20,7 +20,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @Tag(name = "Career", description = "経歴情報 API")
-@RequestMapping("/api/careers")
+@RequestMapping("/api/admin/careers")
 public class CareerController {
     private final CareerService careerService;
 

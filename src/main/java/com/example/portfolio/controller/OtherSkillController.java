@@ -19,7 +19,7 @@ import java.util.List;
 
 @RestController
 @Tag(name = "OtherSkill", description = "その他技術情報 API")
-@RequestMapping("/api/other-skills")
+@RequestMapping("/api/admin/other-skills")
 @RequiredArgsConstructor
 public class OtherSkillController {
     private final OtherSkillService otherSkillService;

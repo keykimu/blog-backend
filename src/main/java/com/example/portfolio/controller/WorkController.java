@@ -21,7 +21,7 @@ import java.util.List;
 
 @RestController
 @Tag(name = "Work", description = "成果物情報 API")
-@RequestMapping("/api/works")
+@RequestMapping("/api/admin/works")
 @RequiredArgsConstructor
 public class WorkController {
     private final WorkService workService;

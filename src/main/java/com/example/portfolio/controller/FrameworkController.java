@@ -19,7 +19,7 @@ import java.util.List;
 
 @RestController
 @Tag(name = "Framework", description = "フレームワーク情報 API")
-@RequestMapping("/api/frameworks")
+@RequestMapping("/api/admin/frameworks")
 @RequiredArgsConstructor
 public class FrameworkController {
     private final FrameworkService frameworkService;

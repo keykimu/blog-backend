@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Tag(name = "Profile", description = "プロフィール情報 API")
-@RequestMapping("/api/profile")
+@RequestMapping("/api/admin/profile")
 @RequiredArgsConstructor
 public class ProfileController {
     private final ProfileService profileService;

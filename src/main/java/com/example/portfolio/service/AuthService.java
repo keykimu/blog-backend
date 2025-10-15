@@ -1,7 +1,7 @@
 package com.example.portfolio.service;
 
 import com.example.portfolio.entity.User;
-import com.example.portfolio.exception.AuthenticationException;
+import com.example.portfolio.exception.AuthFailedException;
 import com.example.portfolio.exception.BadRequestException;
 import com.example.portfolio.mapper.UserMapper;
 import com.example.portfolio.mapstruct.UserEntityMapper;
@@ -38,7 +38,7 @@ public class AuthService {
         User user = userMapper.findByUsername(request.getUsername());
 
         if (user == null || !passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new AuthenticationException("認証に失敗しました");
+            throw new AuthFailedException("認証に失敗しました");
         }
 
         // last_login_at を更新

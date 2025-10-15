@@ -13,8 +13,8 @@ public class GlobalExceptionHandler {
     /**
      * ユーザー情報が間違っている場合
      */
-    @ExceptionHandler(AuthenticationException.class)
-    public ResponseEntity<ApiErrorResponse> handleAuthException(AuthenticationException ex) {
+    @ExceptionHandler(AuthFailedException.class)
+    public ResponseEntity<ApiErrorResponse> handleAuthException(AuthFailedException ex) {
         ApiErrorResponse body = new ApiErrorResponse(
                 HttpStatus.UNAUTHORIZED.value(),
                 "AUTH_FAILED",

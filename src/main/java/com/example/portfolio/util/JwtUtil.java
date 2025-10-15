@@ -5,7 +5,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.example.portfolio.exception.AuthenticationException;
+import com.example.portfolio.exception.AuthFailedException;
 import com.example.portfolio.response.AuthCheckResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -32,9 +32,9 @@ public class JwtUtil {
             DecodedJWT jwt = JWT.require(algorithm).build().verify(token);
             return new AuthCheckResponse(jwt.getSubject());
         } catch (TokenExpiredException e) {
-            throw new AuthenticationException("トークンの有効期限が切れています");
+            throw new AuthFailedException("トークンの有効期限が切れています");
         } catch (JWTVerificationException e) {
-            throw new AuthenticationException("不正なトークンです");
+            throw new AuthFailedException("不正なトークンです");
         }
     }
 }

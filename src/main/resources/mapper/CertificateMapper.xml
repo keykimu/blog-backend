@@ -6,23 +6,26 @@
 <mapper namespace="com.example.portfolio.mapper.CertificateMapper">
     <resultMap id="CertificateResultMap" type="com.example.portfolio.entity.Certificate">
         <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
         <result property="year" column="year"/>
         <result property="name" column="name"/>
         <result property="createdAt" column="created_at"/>
         <result property="updatedAt" column="updated_at"/>
     </resultMap>
 
-    <select id="findAll" resultMap="CertificateResultMap">
-        SELECT * FROM certificate
+    <select id="findAllByUserId" resultMap="CertificateResultMap">
+        SELECT * FROM certificates
+        WHERE user_id = #{userId}
         ORDER BY year ASC
     </select>
 
     <insert id="insert" parameterType="com.example.portfolio.entity.Certificate" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO certificate(year, name, created_at, updated_at)
-        VALUES(#{year}, #{name}, now(), now())
+        INSERT INTO certificates(user_id, year, name, created_at, updated_at)
+        VALUES(#{userId}, #{year}, #{name}, now(), now())
     </insert>
 
-    <delete id="deleteAll">
-        DELETE FROM certificate
+    <delete id="deleteAllByUserId">
+        DELETE FROM certificates
+        WHERE user_id = #{userId}
     </delete>
 </mapper>

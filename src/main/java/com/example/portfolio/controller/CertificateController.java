@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -35,8 +36,9 @@ public class CertificateController {
             )
     })
     @GetMapping
-    public ResponseEntity<List<CertificateResponse>> getAll() {
-        return ResponseEntity.ok(certificateService.getAll());
+    public ResponseEntity<List<CertificateResponse>> getAll(HttpServletRequest request) {
+        Long userId = (Long) request.getAttribute("userId");
+        return ResponseEntity.ok(certificateService.getAll(userId));
     }
 
     @Operation(summary = "資格をまとめて登録")
@@ -50,7 +52,8 @@ public class CertificateController {
             )
     })
     @PostMapping
-    public ResponseEntity<List<CertificateResponse>> saveAll(@Valid @RequestBody CertificateListRequest requests) {
-        return ResponseEntity.ok(certificateService.saveAll(requests));
+    public ResponseEntity<List<CertificateResponse>> saveAll(@Valid @RequestBody CertificateListRequest requests,HttpServletRequest request) {
+        Long userId = (Long) request.getAttribute("userId");
+        return ResponseEntity.ok(certificateService.saveAll(requests,userId));
     }
 }

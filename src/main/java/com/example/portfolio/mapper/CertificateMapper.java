@@ -7,7 +7,7 @@ import java.util.List;
 
 @Mapper
 public interface CertificateMapper {
-    List<Certificate> findAll();
+    List<Certificate> findAllByUserId(Long userId);
     void insert(Certificate certificate);
-    void deleteAll();
+    void deleteAllByUserId(Long userId);
 }

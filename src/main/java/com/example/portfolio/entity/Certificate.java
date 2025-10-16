@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 @Data
 public class Certificate {
     private Long id;
+    private Long userId;
     private String year;
     private String name;
     private LocalDateTime createdAt;

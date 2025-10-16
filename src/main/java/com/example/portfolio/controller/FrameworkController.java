@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -35,8 +36,9 @@ public class FrameworkController {
             )
     })
     @GetMapping
-    public ResponseEntity<List<FrameworkResponse>> getAll() {
-        return ResponseEntity.ok(frameworkService.getAll());
+    public ResponseEntity<List<FrameworkResponse>> getAll(HttpServletRequest request) {
+        Long userId = (Long) request.getAttribute("userId");
+        return ResponseEntity.ok(frameworkService.getAll(userId));
     }
 
     @Operation(summary = "フレームワークをまとめて登録")
@@ -50,7 +52,8 @@ public class FrameworkController {
             )
     })
     @PostMapping
-    public ResponseEntity<List<FrameworkResponse>> saveAll(@Valid @RequestBody FrameworkListRequest requests) {
-        return ResponseEntity.ok(frameworkService.saveAll(requests));
+    public ResponseEntity<List<FrameworkResponse>> saveAll(@Valid @RequestBody FrameworkListRequest requests, HttpServletRequest request) {
+        Long userId = (Long) request.getAttribute("userId");
+        return ResponseEntity.ok(frameworkService.saveAll(requests,userId));
     }
 }

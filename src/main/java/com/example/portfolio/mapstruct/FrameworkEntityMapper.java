@@ -11,10 +11,10 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface FrameworkEntityMapper {
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "userId", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     Framework toEntity(FrameworkCreateRequest request);
     FrameworkResponse toResponse(Framework entity);
-    List<Framework> toEntityList(List<FrameworkCreateRequest> requests);
     List<FrameworkResponse> toResponseList(List<Framework> entities);
 }

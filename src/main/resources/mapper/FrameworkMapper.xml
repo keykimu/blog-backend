@@ -6,22 +6,26 @@
 <mapper namespace="com.example.portfolio.mapper.FrameworkMapper">
     <resultMap id="FrameworkResultMap" type="com.example.portfolio.entity.Framework">
         <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
         <result property="name" column="name"/>
         <result property="level" column="level"/>
         <result property="createdAt" column="created_at"/>
         <result property="updatedAt" column="updated_at"/>
     </resultMap>
 
-    <select id="findAll" resultMap="FrameworkResultMap">
-        SELECT * FROM framework ORDER BY id ASC
+    <select id="findAllByUserId" resultMap="FrameworkResultMap">
+        SELECT * FROM frameworks
+        WHERE user_id = #{userId}
+        ORDER BY id ASC
     </select>
 
     <insert id="insert" parameterType="com.example.portfolio.entity.Framework" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO framework(name, level, created_at, updated_at)
-        VALUES (#{name}, #{level}, now(), now())
+        INSERT INTO frameworks(user_id, name, level, created_at, updated_at)
+        VALUES (#{userId}, #{name}, #{level}, now(), now())
     </insert>
 
-    <delete id="deleteAll">
-        DELETE FROM framework
+    <delete id="deleteAllByUserId">
+        DELETE FROM frameworks
+        WHERE user_id = #{userId}
     </delete>
 </mapper>

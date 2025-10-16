@@ -7,7 +7,7 @@ import java.util.List;
 
 @Mapper
 public interface FrameworkMapper {
-    List<Framework> findAll();
+    List<Framework> findAllByUserId(Long userId);
     void insert(Framework framework);
-    void deleteAll();
+    void deleteAllByUserId(Long userId);
 }

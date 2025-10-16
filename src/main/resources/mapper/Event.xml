@@ -6,23 +6,27 @@
 
     <resultMap id="EventResultMap" type="com.example.portfolio.entity.Event">
         <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
         <result property="year" column="year"/>
         <result property="name" column="name"/>
         <result property="createdAt" column="created_at"/>
         <result property="updatedAt" column="updated_at"/>
     </resultMap>
 
-    <select id="findAll" resultMap="EventResultMap">
-        SELECT * FROM events ORDER BY year ASC, id ASC
+    <select id="findAllByUserId" resultMap="EventResultMap">
+        SELECT * FROM events
+        WHERE user_id = #{userId}
+        ORDER BY year ASC, id ASC
     </select>
 
-    <delete id="deleteAll">
+    <delete id="deleteAllByUserId">
         DELETE FROM events
+        WHERE user_id = #{userId}
     </delete>
 
     <insert id="insert" parameterType="com.example.portfolio.entity.Event" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO events(year, name, created_at, updated_at)
-        VALUES(#{year}, #{name}, now(), now())
+        INSERT INTO events(user_id, year, name, created_at, updated_at)
+        VALUES(#{userId}, #{year}, #{name}, now(), now())
     </insert>
 
 </mapper>

@@ -7,7 +7,7 @@ import java.util.List;
 
 @Mapper
 public interface EventMapper {
-    List<Event> findAll();
-    void deleteAll();
+    List<Event> findAllByUserId(Long userId);
+    void deleteAllByUserId(Long userId);
     void insert(Event event);
 }

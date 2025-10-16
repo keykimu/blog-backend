@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -35,8 +36,9 @@ public class CareerController {
             )
     })
     @GetMapping
-    public ResponseEntity<List<CareerResponse>> getAll() {
-        return ResponseEntity.ok(careerService.getAll());
+    public ResponseEntity<List<CareerResponse>> getAll(HttpServletRequest request) {
+        Long userId = (Long) request.getAttribute("userId");
+        return ResponseEntity.ok(careerService.getAll(userId));
     }
 
     @Operation(summary = "経歴をまとめて登録")
@@ -50,7 +52,8 @@ public class CareerController {
             )
     })
     @PostMapping
-    public ResponseEntity<List<CareerResponse>> saveAll(@Valid @RequestBody CareerListRequest requests) {
-        return ResponseEntity.ok(careerService.saveAll(requests));
+    public ResponseEntity<List<CareerResponse>> saveAll(@Valid @RequestBody CareerListRequest requests,HttpServletRequest request) {
+        Long userId = (Long) request.getAttribute("userId");
+        return ResponseEntity.ok(careerService.saveAll(requests,userId));
     }
 }

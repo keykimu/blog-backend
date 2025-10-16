@@ -7,7 +7,7 @@ import java.util.List;
 
 @Mapper
 public interface CareerMapper {
-    List<Career> findAll();
+    List<Career> findAllByUserId(Long userId);
     int insert(Career career);
-    int deleteAll();
+    int deleteAllByUserId(Long userId);
 }

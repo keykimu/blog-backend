@@ -7,6 +7,7 @@
 
     <resultMap id="WorkResultMap" type="com.example.portfolio.entity.Work">
         <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
         <result property="title" column="title"/>
         <result property="techStack" column="tech_stack"/>
         <result property="description" column="description"/>
@@ -15,35 +16,37 @@
         <result property="url" column="url"/>
     </resultMap>
 
-    <select id="findAll" resultMap="WorkResultMap">
-        SELECT id, title, description, tech_stack, created_at, updated_at, url
-        FROM work
+    <select id="findAllByUserId" resultMap="WorkResultMap">
+        SELECT id, user_id, title, description, tech_stack, created_at, updated_at, url
+        FROM works
+        WHERE user_id=#{userId}
         ORDER BY created_at DESC
     </select>
 
     <select id="findById" parameterType="long" resultMap="WorkResultMap">
-        SELECT id, title, description, tech_stack, created_at, updated_at, url
-        FROM work
+        SELECT id, user_id, title, description, tech_stack, created_at, updated_at, url
+        FROM works
         WHERE id = #{id}
     </select>
 
     <insert id="insert" parameterType="com.example.portfolio.request.WorkCreateRequest" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO work (title, description, tech_stack, url, created_at, updated_at)
-        VALUES (#{title}, #{description}, #{techStack}, #{url}, now(), now())
+        INSERT INTO works (user_id, title, description, tech_stack, url, created_at, updated_at)
+        VALUES (#{userId}, #{title}, #{description}, #{techStack}, #{url}, now(), now())
     </insert>
 
     <update id="update" parameterType="com.example.portfolio.request.WorkCreateRequest">
-        UPDATE work
+        UPDATE works
         SET title=#{title},
         description=#{description},
         tech_stack=#{techStack},
         url=#{url},
         updated_at=now()
         WHERE id=#{id}
+        AND user_id=#{userId}
     </update>
 
     <delete id="delete" parameterType="long">
-        DELETE FROM work WHERE id=#{id}
+        DELETE FROM works WHERE id=#{id}
     </delete>
 
 </mapper>

@@ -13,10 +13,12 @@ public interface WorkEntityMapper {
     WorkResponse toResponse(Work work);
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "userId", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     Work toEntity(WorkCreateRequest request);
 
+    @Mapping(target = "userId", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     Work toEntity(WorkUpdateRequest request);

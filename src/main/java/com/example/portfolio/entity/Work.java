@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Work {
     private Long id;
+    private Long userId;
     private String title;
     private String description;
     private String techStack;

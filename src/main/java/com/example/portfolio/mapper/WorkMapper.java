@@ -7,7 +7,7 @@ import java.util.List;
 
 @Mapper
 public interface WorkMapper {
-    List<Work> findAll();
+    List<Work> findAllByUserId(Long id);
     Work findById(Long id);
     void insert(Work work);
     void update(Work work);

@@ -1,5 +1,6 @@
 package com.example.portfolio.util;
 
+import com.example.portfolio.response.AuthCheckResponse;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -57,8 +58,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String token = authHeader.substring(7);
 
         try {
-            jwtUtil.validateToken(token); // 有効期限・署名などを検証
-            filterChain.doFilter(request, response); // OK → 次へ
+            AuthCheckResponse auth = jwtUtil.validateToken(token);
+            request.setAttribute("userId", auth.getUserId());
+            filterChain.doFilter(request, response);
         } catch (Exception ex) {
             unauthorized(response, ex.getMessage());
         }

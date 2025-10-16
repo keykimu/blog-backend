@@ -44,7 +44,7 @@ public class AuthService {
         // last_login_at を更新
         userMapper.updateLastLogin(user.getId(), LocalDateTime.now());
 
-        String token = jwtUtil.generateToken(user.getUsername());
+        String token = jwtUtil.generateToken(user.getId(), user.getUsername());
         return new AuthResponse(token);
     }
 

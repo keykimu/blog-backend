@@ -14,18 +14,18 @@
 
     <select id="findAll" resultMap="UserResultMap">
         SELECT id, username, created_at, updated_at, last_login_at
-        FROM "user"
+        FROM users
         ORDER BY id
     </select>
 
     <select id="findByUsername" resultType="com.example.portfolio.entity.User">
         SELECT id, username, password, created_at, updated_at, last_login_at
-        FROM "user"
+        FROM users
         WHERE username = #{username}
     </select>
 
     <update id="updateLastLogin">
-        UPDATE "user"
+        UPDATE users
         SET last_login_at = #{time}
         WHERE id = #{id}
     </update>

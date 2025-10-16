@@ -20,9 +20,10 @@ public class JwtUtil {
         this.algorithm = Algorithm.HMAC256(secret);
     }
 
-    public String generateToken(String username) {
+    public String generateToken(Long userId, String username) {
         return JWT.create()
                 .withSubject(username)
+                .withClaim("userId", userId)
                 .withExpiresAt(new Date(System.currentTimeMillis() + 3600_000))
                 .sign(algorithm);
     }
@@ -30,7 +31,9 @@ public class JwtUtil {
     public AuthCheckResponse validateToken(String token) {
         try {
             DecodedJWT jwt = JWT.require(algorithm).build().verify(token);
-            return new AuthCheckResponse(jwt.getSubject());
+            String username = jwt.getSubject();
+            Long userId = jwt.getClaim("userId").asLong();
+            return new AuthCheckResponse(userId, username);
         } catch (TokenExpiredException e) {
             throw new AuthFailedException("トークンの有効期限が切れています");
         } catch (JWTVerificationException e) {

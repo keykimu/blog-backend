@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -37,8 +38,9 @@ public class HobbyController {
             )
     })
     @GetMapping
-    public ResponseEntity<List<HobbyResponse>> getAll() {
-        List<HobbyResponse> hobbies = hobbyService.getAllHobbies();
+    public ResponseEntity<List<HobbyResponse>> getAll(HttpServletRequest request) {
+        Long userId = (Long) request.getAttribute("userId");
+        List<HobbyResponse> hobbies = hobbyService.getAllHobbies(userId);
         return ResponseEntity.ok(hobbies);
     }
 
@@ -53,8 +55,9 @@ public class HobbyController {
             )
     })
     @PostMapping
-    public ResponseEntity<List<HobbyResponse>> create(@Valid @RequestBody HobbyListRequest request) {
-        List<HobbyResponse> created = hobbyService.createHobby(request);
+    public ResponseEntity<List<HobbyResponse>> create(@Valid @RequestBody HobbyListRequest createRequest,HttpServletRequest request) {
+        Long userId = (Long) request.getAttribute("userId");
+        List<HobbyResponse> created = hobbyService.createHobby(createRequest,userId);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 }

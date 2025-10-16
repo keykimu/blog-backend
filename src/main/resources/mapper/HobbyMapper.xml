@@ -6,21 +6,24 @@
 <mapper namespace="com.example.portfolio.mapper.HobbyMapper">
     <resultMap id="HobbyResultMap" type="com.example.portfolio.entity.Hobby">
         <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
         <result property="name" column="name"/>
         <result property="createdAt" column="created_at"/>
         <result property="updatedAt" column="updated_at"/>
     </resultMap>
 
-    <select id="findAll" resultMap="HobbyResultMap">
-        SELECT * FROM hobby
+    <select id="findAllByUserId" resultMap="HobbyResultMap">
+        SELECT * FROM hobbies
+        WHERE user_id = #{userId}
     </select>
 
     <insert id="insert" parameterType="com.example.portfolio.request.HobbyCreateRequest" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO hobby(name, created_at, updated_at)
-        VALUES(#{name}, now(), now())
+        INSERT INTO hobbies(user_id, name, created_at, updated_at)
+        VALUES(#{userId}, #{name}, now(), now())
     </insert>
 
-    <delete id="deleteAll">
-        DELETE FROM hobby
+    <delete id="deleteAllByUserId">
+        DELETE FROM hobbies
+        WHERE user_id = #{userId}
     </delete>
 </mapper>

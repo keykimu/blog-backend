@@ -7,7 +7,7 @@ import java.util.List;
 
 @Mapper
 public interface HobbyMapper {
-    List<Hobby> findAll();
+    List<Hobby> findAllByUserId(Long userId);
     int insert(Hobby profile);
-    int deleteAll();
+    int deleteAllByUserId(Long userId);
 }

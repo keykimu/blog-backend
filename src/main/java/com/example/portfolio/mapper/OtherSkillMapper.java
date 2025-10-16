@@ -7,7 +7,7 @@ import java.util.List;
 
 @Mapper
 public interface OtherSkillMapper {
-    List<OtherSkill> findAll();
-    void deleteAll();
+    List<OtherSkill> findAllByUserId(Long userId);
+    void deleteAllByUserId(Long UserId);
     void insert(OtherSkill otherSkill);
 }

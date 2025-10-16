@@ -6,23 +6,27 @@
 
     <resultMap id="OtherSkillResultMap" type="com.example.portfolio.entity.OtherSkill">
         <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
         <result property="name" column="name"/>
         <result property="level" column="level"/>
         <result property="createdAt" column="created_at"/>
         <result property="updatedAt" column="updated_at"/>
     </resultMap>
 
-    <select id="findAll" resultMap="OtherSkillResultMap">
-        SELECT * FROM other_skill ORDER BY id ASC
+    <select id="findAllByUserId" resultMap="OtherSkillResultMap">
+        SELECT * FROM other_skills
+        WHERE user_id = #{userId}
+        ORDER BY id ASC
     </select>
 
-    <delete id="deleteAll">
-        DELETE FROM other_skill
+    <delete id="deleteAllByUserId">
+        DELETE FROM other_skills
+        WHERE user_id = #{userId}
     </delete>
 
     <insert id="insert" parameterType="com.example.portfolio.entity.OtherSkill" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO other_skill (name, level, created_at, updated_at)
-        VALUES (#{name}, #{level}, now(), now())
+        INSERT INTO other_skills (user_id, name, level, created_at, updated_at)
+        VALUES (#{userId}, #{name}, #{level}, now(), now())
     </insert>
 
 </mapper>

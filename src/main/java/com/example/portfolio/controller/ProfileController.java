@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -28,19 +29,29 @@ public class ProfileController {
             @ApiResponse(responseCode = "400", description = "バリデーションエラー",
                     content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
             ),
+            @ApiResponse(responseCode = "404", description = "対象が存在しない",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
+            ),
             @ApiResponse(responseCode = "500", description = "サーバーエラー",
                     content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
             )
     })
     @GetMapping
-    public ResponseEntity<ProfileResponse> getProfile() {
-        return ResponseEntity.ok(profileService.getProfile());
+    public ResponseEntity<ProfileResponse> getProfile(HttpServletRequest request) {
+        Long userId = (Long) request.getAttribute("userId");
+        return ResponseEntity.ok(profileService.getProfile(userId));
     }
 
-    @Operation(summary = "プロフィールを登録")
+    @Operation(summary = "プロフィールを更新")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "登録成功"),
+            @ApiResponse(responseCode = "200", description = "更新成功"),
             @ApiResponse(responseCode = "400", description = "バリデーションエラー",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
+            ),
+            @ApiResponse(responseCode = "403", description = "他人のデータは操作できません",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
+            ),
+            @ApiResponse(responseCode = "404", description = "対象が存在しない",
                     content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
             ),
             @ApiResponse(responseCode = "500", description = "サーバーエラー",
@@ -50,7 +61,9 @@ public class ProfileController {
     @PutMapping("/{id}")
     public ResponseEntity<ProfileResponse> updateProfile(
             @PathVariable Long id,
-            @Valid @RequestBody ProfileUpdateRequest request) {
-        return ResponseEntity.ok(profileService.updateProfile(id, request));
+            @Valid @RequestBody ProfileUpdateRequest updateRequest, HttpServletRequest request
+    ) {
+        Long userId = (Long) request.getAttribute("userId");
+        return ResponseEntity.ok(profileService.updateProfile(id, updateRequest, userId));
     }
 }

@@ -5,6 +5,6 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface ProfileMapper {
-    Profile find();
+    Profile findByUserId(Long userId);
     int update(Profile profile);
 }

@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 @Data
 public class Profile {
     private Long id;
+    private Long userId;
     private String name;
     private String nickname;
     private String  nameEn;

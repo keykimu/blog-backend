@@ -12,6 +12,7 @@ public interface ProfileEntityMapper {
     ProfileResponse toResponse(Profile entity);
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "userId", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     Profile toEntity(ProfileUpdateRequest request);

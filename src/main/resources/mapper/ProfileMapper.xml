@@ -7,6 +7,7 @@
 
     <resultMap id="ProfileResultMap" type="com.example.portfolio.entity.Profile">
         <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
         <result property="name" column="name"/>
         <result property="nickname" column="nickname"/>
         <result property="nameEn" column="name_en"/>
@@ -18,10 +19,10 @@
         <result property="updatedAt" column="updated_at"/>
     </resultMap>
 
-    <select id="find" resultMap="ProfileResultMap">
-        SELECT id, name, nickname, name_en, intro, bio, mail, github, created_at, updated_at
+    <select id="findByUserId" resultMap="ProfileResultMap">
+        SELECT id, user_id, name, nickname, name_en, intro, bio, mail, github, created_at, updated_at
         FROM profile
-        LIMIT 1
+        WHERE user_id = #{userId}
     </select>
 
     <update id="update" parameterType="com.example.portfolio.entity.Profile">
@@ -34,7 +35,7 @@
         mail=#{mail},
         github=#{github},
         updated_at=now()
-        WHERE id=#{id}
+        WHERE user_id = #{userId}
     </update>
 
 </mapper>

@@ -7,7 +7,7 @@ import java.util.List;
 
 @Mapper
 public interface LanguageMapper {
-    List<Language> findAll();
-    void deleteAll();
+    List<Language> findAllByUserId(Long userId);
+    void deleteAllByUserId(Long userId);
     void insert(Language request);
 }

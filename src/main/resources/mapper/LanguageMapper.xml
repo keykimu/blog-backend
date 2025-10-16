@@ -7,6 +7,7 @@
 
     <resultMap id="LanguageResultMap" type="com.example.portfolio.entity.Language">
         <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
         <result property="name" column="name"/>
         <result property="level" column="level"/>
         <result property="experience" column="experience"/>
@@ -14,18 +15,21 @@
         <result property="updatedAt" column="updated_at"/>
     </resultMap>
 
-    <select id="findAll" resultMap="LanguageResultMap">
-        SELECT * FROM language ORDER BY id ASC
+    <select id="findAllByUserId" resultMap="LanguageResultMap">
+        SELECT * FROM languages
+        WHERE user_id = #{userId}
+        ORDER BY id ASC
     </select>
 
-    <delete id="deleteAll">
-        DELETE FROM language
+    <delete id="deleteAllByUserId">
+        DELETE FROM languages
+        WHERE user_id = #{userId}
     </delete>
 
     <insert id="insert" parameterType="com.example.portfolio.entity.Language"
             useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO language(name, level, experience, created_at, updated_at)
-        VALUES(#{name}, #{level}, #{experience}, now(), now())
+        INSERT INTO languages(user_id, name, level, experience, created_at, updated_at)
+        VALUES(#{userId}, #{name}, #{level}, #{experience}, now(), now())
     </insert>
 
 </mapper>

@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -36,8 +37,9 @@ public class LanguageController {
             )
     })
     @GetMapping
-    public ResponseEntity<List<LanguageResponse>> getAll() {
-        return ResponseEntity.ok(languageService.getAll());
+    public ResponseEntity<List<LanguageResponse>> getAll(HttpServletRequest request) {
+        Long userId = (Long) request.getAttribute("userId");
+        return ResponseEntity.ok(languageService.getAll(userId));
     }
 
     @Operation(summary = "言語をまとめて登録")
@@ -51,7 +53,8 @@ public class LanguageController {
             )
     })
     @PostMapping
-    public ResponseEntity<List<LanguageResponse>> saveAll(@Valid @RequestBody LanguageListRequest requests) {
-        return ResponseEntity.ok(languageService.saveAll(requests));
+    public ResponseEntity<List<LanguageResponse>> saveAll(@Valid @RequestBody LanguageListRequest requests, HttpServletRequest request) {
+        Long userId = (Long) request.getAttribute("userId");
+        return ResponseEntity.ok(languageService.saveAll(requests,userId));
     }
 }

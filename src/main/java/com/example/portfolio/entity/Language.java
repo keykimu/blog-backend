@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 @Data
 public class Language {
     private Long id;
+    private Long userId;
     private String name;
     private String level;
     private String experience;

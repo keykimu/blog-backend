@@ -1,4 +1,4 @@
-package com.example.portfolio.controller;
+package com.example.portfolio.controller.admin;
 
 import com.example.portfolio.request.WorkCreateRequest;
 import com.example.portfolio.request.WorkUpdateRequest;

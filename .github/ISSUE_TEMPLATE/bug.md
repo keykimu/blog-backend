@@ -1,3 +1,11 @@
+---
+name: "🐛 Bug"
+about: "不具合修正用のテンプレート"
+title: "[Bug] "
+labels: ["bug"]
+assignees: ""
+---
+
 ## 🐛 不具合内容
 （発生した問題・エラーメッセージなど）
 

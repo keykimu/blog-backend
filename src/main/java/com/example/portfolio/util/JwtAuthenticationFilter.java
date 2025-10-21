@@ -88,6 +88,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private void unauthorized(HttpServletResponse response, String message) throws IOException {
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.setContentType("application/json; charset=UTF-8");
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type");
         response.getWriter().write("{\"status\":401, \"message\":\"" + message + "\"}");
     }
 }

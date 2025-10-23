@@ -68,20 +68,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     /** 公開エンドポイント判定 */
     private boolean isPublicEndpoint(String path, String method) {
-        // 認証不要API一覧
-        if (path.startsWith("/api/auth/login")) return true;
-        if (method.equalsIgnoreCase("GET")) {
-            return path.startsWith("/api/languages")
-                    || path.startsWith("/api/other-skills")
-                    || path.startsWith("/api/profile")
-                    || path.startsWith("/api/frameworks")
-                    || path.startsWith("/api/hobby")
-                    || path.startsWith("/api/works")
-                    || path.startsWith("/api/certificates")
-                    || path.startsWith("/api/events")
-                    || path.startsWith("/api/careers");
-        }
-        return false;
+        // 管理者用API以外はすべて公開
+        return !path.startsWith("/api/admin");
     }
 
     /** 認証失敗レスポンス */

@@ -68,8 +68,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     /** 公開エンドポイント判定 */
     private boolean isPublicEndpoint(String path, String method) {
-        // 管理者用API以外はすべて公開
-        return !path.startsWith("/api/admin");
+        // 管理者ログインと管理者用API以外はすべて公開
+        return path.startsWith("/api/admin/auth/login") ||!path.startsWith("/api/admin");
     }
 
     /** 認証失敗レスポンス */

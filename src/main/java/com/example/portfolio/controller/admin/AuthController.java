@@ -21,7 +21,7 @@ import java.util.List;
 
 @RestController
 @Tag(name = "Auth", description = "認証関連エンドポイント")
-@RequestMapping("/api/auth")
+@RequestMapping("/api/admin/auth")
 @RequiredArgsConstructor
 public class AuthController {
     private final AuthService authService;

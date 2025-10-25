@@ -1,9 +1,8 @@
 package com.example.portfolio.controller;
 
-
-import com.example.portfolio.response.ApiErrorResponse;
-import com.example.portfolio.response.ProfileItemsResponse;
-import com.example.portfolio.service.ProfileItemsService;
+import com.example.portfolio.response.PublicProfileItemsResponse;
+import com.example.portfolio.response.common.ApiErrorResponse;
+import com.example.portfolio.service.PublicProfileItemsService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -21,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/profile-items")
 @RequiredArgsConstructor
 public class PublicProfileItemController {
-    private final ProfileItemsService profileItemsService;
+    private final PublicProfileItemsService publicProfileItemsService;
 
     @Operation(summary = "公開用趣味・経歴・イベント・資格を取得")
     @ApiResponses({
@@ -35,7 +34,7 @@ public class PublicProfileItemController {
             )
     })
     @GetMapping
-    public ResponseEntity<ProfileItemsResponse> getAllByUserId() {
-        return ResponseEntity.ok(profileItemsService.get(1L));
+    public ResponseEntity<PublicProfileItemsResponse> getAllByUserId() {
+        return ResponseEntity.ok(publicProfileItemsService.getAllByUserId());
     }
 }

@@ -2,7 +2,8 @@ package com.example.portfolio.mapstruct;
 
 import com.example.portfolio.entity.Career;
 import com.example.portfolio.request.CareerRequest;
-import com.example.portfolio.response.CareerResponse;
+import com.example.portfolio.response.PublicCareerResponse;
+import com.example.portfolio.response.admin.CareerResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -14,4 +15,5 @@ public interface CareerEntityMapper {
     @Mapping(target = "updatedAt", ignore = true)
     Career toEntity(CareerRequest request);
     CareerResponse toResponse(Career entity);
+    PublicCareerResponse toPublicResponse(Career entity);
 }

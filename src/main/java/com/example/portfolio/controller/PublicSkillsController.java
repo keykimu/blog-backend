@@ -1,8 +1,8 @@
 package com.example.portfolio.controller;
 
-import com.example.portfolio.response.ApiErrorResponse;
-import com.example.portfolio.response.SkillsResponse;
-import com.example.portfolio.service.SkillsService;
+import com.example.portfolio.response.PublicSkillsResponse;
+import com.example.portfolio.response.common.ApiErrorResponse;
+import com.example.portfolio.service.PublicSkillsService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/skills")
 @RequiredArgsConstructor
 public class PublicSkillsController {
-    private final SkillsService skillsService;
+    private final PublicSkillsService publicSkillsService;
 
     @Operation(summary = "公開用言語・フレームワーク・その他を取得")
     @ApiResponses({
@@ -33,7 +33,7 @@ public class PublicSkillsController {
             )
     })
     @GetMapping
-    public ResponseEntity<SkillsResponse> getAllByUserId() {
-        return ResponseEntity.ok(skillsService.get(1L));
+    public ResponseEntity<PublicSkillsResponse> getAllByUserId() {
+        return ResponseEntity.ok(publicSkillsService.getAllByUserId());
     }
 }

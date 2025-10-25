@@ -1,7 +1,7 @@
 package com.example.portfolio.mapstruct;
 
 import com.example.portfolio.entity.User;
-import com.example.portfolio.response.UserResponse;
+import com.example.portfolio.response.admin.UserResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

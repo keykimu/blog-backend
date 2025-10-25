@@ -1,9 +1,9 @@
 package com.example.portfolio.controller.admin;
 
 import com.example.portfolio.request.ProfileUpdateRequest;
-import com.example.portfolio.response.ApiErrorResponse;
-import com.example.portfolio.response.ProfileResponse;
-import com.example.portfolio.service.ProfileService;
+import com.example.portfolio.response.common.ApiErrorResponse;
+import com.example.portfolio.response.admin.ProfileResponse;
+import com.example.portfolio.service.admin.AdminProfileService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/admin/profile")
 @RequiredArgsConstructor
 public class ProfileController {
-    private final ProfileService profileService;
+    private final AdminProfileService adminProfileService;
 
     @Operation(summary = "プロフィールを取得")
     @ApiResponses({
@@ -39,7 +39,7 @@ public class ProfileController {
     @GetMapping
     public ResponseEntity<ProfileResponse> getProfile(HttpServletRequest request) {
         Long userId = (Long) request.getAttribute("userId");
-        return ResponseEntity.ok(profileService.getProfile(userId));
+        return ResponseEntity.ok(adminProfileService.getProfile(userId));
     }
 
     @Operation(summary = "プロフィールを更新")
@@ -64,6 +64,6 @@ public class ProfileController {
             @Valid @RequestBody ProfileUpdateRequest updateRequest, HttpServletRequest request
     ) {
         Long userId = (Long) request.getAttribute("userId");
-        return ResponseEntity.ok(profileService.updateProfile(id, updateRequest, userId));
+        return ResponseEntity.ok(adminProfileService.updateProfile(id, updateRequest, userId));
     }
 }

@@ -1,6 +1,6 @@
 package com.example.portfolio.util;
 
-import com.example.portfolio.response.AuthCheckResponse;
+import com.example.portfolio.response.admin.AuthCheckResponse;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

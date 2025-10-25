@@ -2,9 +2,9 @@ package com.example.portfolio.controller.admin;
 
 import com.example.portfolio.request.WorkCreateRequest;
 import com.example.portfolio.request.WorkUpdateRequest;
-import com.example.portfolio.response.ApiErrorResponse;
-import com.example.portfolio.response.WorkResponse;
-import com.example.portfolio.service.WorkService;
+import com.example.portfolio.response.common.ApiErrorResponse;
+import com.example.portfolio.response.admin.WorkResponse;
+import com.example.portfolio.service.admin.AdminWorkService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -25,7 +25,7 @@ import java.util.List;
 @RequestMapping("/api/admin/works")
 @RequiredArgsConstructor
 public class WorkController {
-    private final WorkService workService;
+    private final AdminWorkService adminWorkService;
 
     @Operation(summary = "成果物をまとめて取得")
     @ApiResponses({
@@ -40,7 +40,7 @@ public class WorkController {
     @GetMapping
     public ResponseEntity<List<WorkResponse>> getAll(HttpServletRequest request) {
         Long userId = (Long) request.getAttribute("userId");
-        List<WorkResponse> works = workService.getAllWorks(userId);
+        List<WorkResponse> works = adminWorkService.getAllWorks(userId);
         return ResponseEntity.ok(works);
     }
 
@@ -60,7 +60,7 @@ public class WorkController {
     @GetMapping("/{id}")
     public ResponseEntity<WorkResponse> getById(@PathVariable Long id, HttpServletRequest request) {
         Long userId = (Long) request.getAttribute("userId");
-        WorkResponse work = workService.getWork(id,userId);
+        WorkResponse work = adminWorkService.getWork(id,userId);
         if (work != null) {
             return ResponseEntity.ok(work);
         } else {
@@ -81,7 +81,7 @@ public class WorkController {
     @PostMapping
     public ResponseEntity<WorkResponse> create(@Valid @RequestBody WorkCreateRequest createRequest, HttpServletRequest request) {
         Long userId = (Long) request.getAttribute("userId");
-        WorkResponse createdWork = workService.createWork(createRequest,userId);
+        WorkResponse createdWork = adminWorkService.createWork(createRequest,userId);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdWork);
     }
 
@@ -104,7 +104,7 @@ public class WorkController {
     @PutMapping("/{id}")
     public ResponseEntity<WorkResponse> update(@PathVariable Long id, @Valid @RequestBody WorkUpdateRequest updateRequest, HttpServletRequest request) {
         Long userId = (Long) request.getAttribute("userId");
-        WorkResponse updatedWork = workService.updateWork(id,updateRequest,userId);
+        WorkResponse updatedWork = adminWorkService.updateWork(id,updateRequest,userId);
         if (updatedWork != null) {
             return ResponseEntity.ok(updatedWork);
         } else {
@@ -131,7 +131,7 @@ public class WorkController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id, HttpServletRequest request) {
         Long userId = (Long) request.getAttribute("userId");
-        boolean deleted = workService.deleteWork(id, userId);
+        boolean deleted = adminWorkService.deleteWork(id, userId);
         if (deleted) {
             return ResponseEntity.noContent().build();
         } else {

@@ -2,7 +2,8 @@ package com.example.portfolio.mapstruct;
 
 import com.example.portfolio.entity.Language;
 import com.example.portfolio.request.LanguageRequest;
-import com.example.portfolio.response.LanguageResponse;
+import com.example.portfolio.response.PublicLanguageResponse;
+import com.example.portfolio.response.admin.LanguageResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -13,6 +14,6 @@ public interface LanguageEntityMapper {
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     Language toEntity(LanguageRequest request);
-
-    LanguageResponse toResponseList(Language entities);
+    LanguageResponse toResponse(Language entities);
+    PublicLanguageResponse toPublicResponse(Language entities);
 }

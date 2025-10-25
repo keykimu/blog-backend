@@ -1,8 +1,8 @@
 package com.example.portfolio.controller;
 
-import com.example.portfolio.response.ApiErrorResponse;
-import com.example.portfolio.response.WorkResponse;
-import com.example.portfolio.service.WorkService;
+import com.example.portfolio.response.PublicWorkResponse;
+import com.example.portfolio.response.common.ApiErrorResponse;
+import com.example.portfolio.service.PublicWorksService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -23,7 +23,7 @@ import java.util.List;
 @RequestMapping("/api/works")
 @RequiredArgsConstructor
 public class PublicWorkController {
-    private final WorkService workService;
+    private final PublicWorksService publicWorksService;
 
     @Operation(summary = "公開用成果物をまとめて取得")
     @ApiResponses({
@@ -36,8 +36,8 @@ public class PublicWorkController {
             )
     })
     @GetMapping
-    public ResponseEntity<List<WorkResponse>> getAllByUserId() {
-        return ResponseEntity.ok(workService.getAllWorks(1L));
+    public ResponseEntity<List<PublicWorkResponse>> getAllByUserId() {
+        return ResponseEntity.ok(publicWorksService.getAllByUserId());
     }
 
     @Operation(summary = "公開用成果物を取得")
@@ -54,7 +54,7 @@ public class PublicWorkController {
             )
     })
     @GetMapping("/{id}")
-    public ResponseEntity<WorkResponse> getByUserId(@PathVariable Long id) {
-        return ResponseEntity.ok(workService.getWork(id,1L));
+    public ResponseEntity<PublicWorkResponse> getByUserId(@PathVariable Long id) {
+        return ResponseEntity.ok(publicWorksService.getWorks(id));
     }
 }

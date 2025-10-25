@@ -3,14 +3,15 @@ package com.example.portfolio.mapstruct;
 import com.example.portfolio.entity.Work;
 import com.example.portfolio.request.WorkCreateRequest;
 import com.example.portfolio.request.WorkUpdateRequest;
-import com.example.portfolio.response.WorkResponse;
+import com.example.portfolio.response.PublicWorkResponse;
+import com.example.portfolio.response.admin.WorkResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring")
 public interface WorkEntityMapper {
     WorkResponse toResponse(Work work);
+    PublicWorkResponse toPublicResponse(Work work);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "userId", ignore = true)

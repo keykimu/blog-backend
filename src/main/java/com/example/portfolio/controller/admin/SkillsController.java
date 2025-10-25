@@ -1,9 +1,9 @@
 package com.example.portfolio.controller.admin;
 
 import com.example.portfolio.request.SkillsRequest;
-import com.example.portfolio.response.ApiErrorResponse;
-import com.example.portfolio.response.SkillsResponse;
-import com.example.portfolio.service.SkillsService;
+import com.example.portfolio.response.common.ApiErrorResponse;
+import com.example.portfolio.response.admin.SkillsResponse;
+import com.example.portfolio.service.admin.AdminSkillsService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/admin/skills")
 @RequiredArgsConstructor
 public class SkillsController {
-    private final SkillsService skillsService;
+    private final AdminSkillsService adminSkillsService;
 
     @Operation(summary = "言語・フレームワーク・その他を取得")
     @ApiResponses({
@@ -36,7 +36,7 @@ public class SkillsController {
     @GetMapping
     public ResponseEntity<SkillsResponse> getAll(HttpServletRequest request) {
         Long userId = (Long) request.getAttribute("userId");
-        return ResponseEntity.ok(skillsService.get(userId));
+        return ResponseEntity.ok(adminSkillsService.getAllByUserId(userId));
     }
 
     @Operation(summary = "言語・フレームワーク・その他技術をまとめて登録")
@@ -52,6 +52,6 @@ public class SkillsController {
     @PostMapping
     public ResponseEntity<SkillsResponse> saveAll(@Valid @RequestBody SkillsRequest re, HttpServletRequest request){
         Long userId = (Long) request.getAttribute("userId");
-        return ResponseEntity.ok(skillsService.saveAll(re,userId));
+        return ResponseEntity.ok(adminSkillsService.saveAll(re,userId));
     }
 }

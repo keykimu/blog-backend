@@ -1,0 +1,13 @@
+package com.example.portfolio.response.admin;
+
+import lombok.Data;
+import java.time.LocalDateTime;
+
+@Data
+public class OtherSkillResponse {
+    private Long id;
+    private String name;
+    private String level;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+}

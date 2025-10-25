@@ -2,10 +2,10 @@ package com.example.portfolio.mapstruct;
 
 import com.example.portfolio.entity.Certificate;
 import com.example.portfolio.request.CertificateRequest;
-import com.example.portfolio.response.CertificateResponse;
+import com.example.portfolio.response.PublicCertificateResponse;
+import com.example.portfolio.response.admin.CertificateResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring")
 public interface CertificateEntityMapper {
@@ -16,4 +16,5 @@ public interface CertificateEntityMapper {
     Certificate toEntity(CertificateRequest request);
 
     CertificateResponse toResponse(Certificate entity);
+    PublicCertificateResponse toPublicResponse(Certificate entity);
 }

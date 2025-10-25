@@ -1,8 +1,8 @@
 package com.example.portfolio.controller;
 
-import com.example.portfolio.response.ApiErrorResponse;
-import com.example.portfolio.response.ProfileResponse;
-import com.example.portfolio.service.ProfileService;
+import com.example.portfolio.response.PublicProfileResponse;
+import com.example.portfolio.response.common.ApiErrorResponse;
+import com.example.portfolio.service.PublicProfileService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/profile")
 @RequiredArgsConstructor
 public class PublicProfileController {
-    private final ProfileService profileService;
+    private final PublicProfileService publicProfileService;
 
     @Operation(summary = "公開用プロフィールを取得")
     @ApiResponses({
@@ -36,7 +36,7 @@ public class PublicProfileController {
             )
     })
     @GetMapping
-    public ResponseEntity<ProfileResponse> getAllByUserId() {
-        return ResponseEntity.ok(profileService.getProfile(1L));
+    public ResponseEntity<PublicProfileResponse> getAllByUserId() {
+        return ResponseEntity.ok(publicProfileService.getProfile());
     }
 }

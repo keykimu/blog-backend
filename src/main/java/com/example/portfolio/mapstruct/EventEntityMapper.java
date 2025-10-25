@@ -2,12 +2,11 @@ package com.example.portfolio.mapstruct;
 
 import com.example.portfolio.entity.Event;
 import com.example.portfolio.request.EventRequest;
-import com.example.portfolio.response.EventResponse;
+import com.example.portfolio.response.PublicEventResponse;
+import com.example.portfolio.response.admin.EventResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
 
-import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface EventEntityMapper {
@@ -17,5 +16,5 @@ public interface EventEntityMapper {
     @Mapping(target = "updatedAt", ignore = true)
     Event toEntity(EventRequest request);
     EventResponse toResponse(Event entity);
-    List<EventResponse> toResponseList(List<Event> entities);
+    PublicEventResponse toPublicResponse(Event entity);
 }

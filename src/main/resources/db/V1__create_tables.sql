@@ -147,8 +147,8 @@ INSERT INTO other_skills (user_id, name, level) VALUES
 
 
 INSERT INTO works (user_id, title, description, tech_stack, url) VALUES
-(1, '成果物1', '説明文1', 'Vue, TypeScript, Spring Boot', '@/assets/no_image.png'),
-(1, '成果物2', '説明文2', 'Vue, TypeScript, Spring Boot', '@/assets/no_image.png');
+(1, '成果物1', '説明文1', 'Vue, TypeScript, Spring Boot', 'akagi.png'),
+(1, '成果物2', '説明文2', 'Vue, TypeScript, Spring Boot', '');
 
 
 -- 管理者2
@@ -166,8 +166,8 @@ INSERT INTO careers (user_id,year, name) VALUES
 (2, '2020', '大学卒業');
 
 INSERT INTO works (user_id, title, description, tech_stack, url) VALUES
-(2, 'テスト成果物1', 'テスト説明1', 'Java, Spring Boot', '@/assets/no_image.png'),
-(2, 'テスト成果物2', 'テスト説明2', 'Vue, TypeScript', '@/assets/no_image.png');
+(2, 'テスト成果物1', 'テスト説明1', 'Java, Spring Boot', ''),
+(2, 'テスト成果物2', 'テスト説明2', 'Vue, TypeScript', 'no_image.png');
 
 INSERT INTO frameworks (user_id, name, level) VALUES
 (2, 'JUnit', 'テストの実務経験あり');

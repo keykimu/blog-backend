@@ -10,6 +10,7 @@ public class PublicProfileResponse {
     private String nameEn;
     private String intro;
     private String bio;
+    private String imageName;
     private String mail;
     private String github;
 }

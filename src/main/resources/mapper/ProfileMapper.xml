@@ -13,6 +13,7 @@
         <result property="nameEn" column="name_en"/>
         <result property="intro" column="intro"/>
         <result property="bio" column="bio"/>
+        <result property="imageName" column="image_name"/>
         <result property="mail" column="mail"/>
         <result property="github" column="github"/>
         <result property="createdAt" column="created_at"/>
@@ -20,7 +21,7 @@
     </resultMap>
 
     <select id="findByUserId" resultMap="ProfileResultMap">
-        SELECT id, user_id, name, nickname, name_en, intro, bio, mail, github, created_at, updated_at
+        SELECT id, user_id, name, nickname, name_en, intro, bio, image_name, mail, github, created_at, updated_at
         FROM profile
         WHERE user_id = #{userId}
     </select>
@@ -32,6 +33,7 @@
         name_en=#{nameEn},
         intro=#{intro},
         bio=#{bio},
+        image_name=#{imageName},
         mail=#{mail},
         github=#{github},
         updated_at=now()

@@ -15,6 +15,7 @@ CREATE TABLE profile (
     name_en VARCHAR(255),
     intro VARCHAR(255),
     bio TEXT,
+    image_name VARCHAR(255),
     mail VARCHAR(255),
     github VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -110,8 +111,8 @@ CREATE TABLE works (
 INSERT INTO users (username, password) VALUES
 ('developer','$2a$08$F71Pv0s0EEzNnY/kBSeekuHAgqW20m9FGh0fFnYXQ8/cnpJ.AdzeS');
 
-INSERT INTO profile (user_id, name, nickname, name_en, intro, bio, mail, github) VALUES
-(1,'木村勇紀', 'kimu', 'Yuki Kimura', '駆け出しエンジニア', '東京のIT企業に勤めています。Javaを中心にバックエンドの開発をしてきましたが、最近はVue、TypeScriptを使用したフロントエンドの開発もしています。詳しいスキルや経験はヘッダーのスキルを見てください。ポートフォリオ兼、今後制作するであろう成果物をまとめるために制作しました。', 'keykimu1999@gmail.com', 'https://github.com/keykimu');
+INSERT INTO profile (user_id, name, nickname, name_en, intro, bio, image_name, mail, github) VALUES
+(1,'木村勇紀', 'kimu', 'Yuki Kimura', '駆け出しエンジニア', '東京のIT企業に勤めています。Javaを中心にバックエンドの開発をしてきましたが、最近はVue、TypeScriptを使用したフロントエンドの開発もしています。詳しいスキルや経験はヘッダーのスキルを見てください。ポートフォリオ兼、今後制作するであろう成果物をまとめるために制作しました。', 'akagi.png', 'keykimu1999@gmail.com', 'https://github.com/keykimu');
 
 INSERT INTO hobbies (user_id, name) VALUES
 (1, 'アニメ・ゲーム（Key）'),
@@ -147,16 +148,16 @@ INSERT INTO other_skills (user_id, name, level) VALUES
 
 
 INSERT INTO works (user_id, title, description, tech_stack, url) VALUES
-(1, '成果物1', '説明文1', 'Vue, TypeScript, Spring Boot', 'akagi.png'),
-(1, '成果物2', '説明文2', 'Vue, TypeScript, Spring Boot', '');
+(1, '成果物1', '説明文1', 'Vue, TypeScript, Spring Boot', 'portfolio.png'),
+(1, '成果物2', '説明文2', 'Vue, TypeScript, Spring Boot', 'no_image.png');
 
 
 -- 管理者2
 INSERT INTO users (username, password) VALUES
 ('tester','$2a$08$SLcpaX4arCIjXpZNV8fQA.5J/Nzhx1k.8d1PpNQ7Ff4QEgLAy2zs.');
 
-INSERT INTO profile (user_id, name, nickname, name_en, intro, bio, mail, github) VALUES
-(2,'テスト 太郎', 'test', 'Taro Test', 'テスト用管理者', 'ダミーアカウントです。動作検証用。', 'test@example.com', 'https://github.com/test');
+INSERT INTO profile (user_id, name, nickname, name_en, intro, bio, image_name, mail, github) VALUES
+(2,'テスト 太郎', 'test', 'Taro Test', 'テスト用管理者', 'ダミーアカウントです。動作検証用。', 'no_image.png', 'test@example.com', 'https://github.com/test');
 
 INSERT INTO hobbies (user_id, name) VALUES
 (2, '読書'),
@@ -166,7 +167,7 @@ INSERT INTO careers (user_id,year, name) VALUES
 (2, '2020', '大学卒業');
 
 INSERT INTO works (user_id, title, description, tech_stack, url) VALUES
-(2, 'テスト成果物1', 'テスト説明1', 'Java, Spring Boot', ''),
+(2, 'テスト成果物1', 'テスト説明1', 'Java, Spring Boot', 'no_image.png'),
 (2, 'テスト成果物2', 'テスト説明2', 'Vue, TypeScript', 'no_image.png');
 
 INSERT INTO frameworks (user_id, name, level) VALUES

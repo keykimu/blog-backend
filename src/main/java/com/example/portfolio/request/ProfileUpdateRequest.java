@@ -27,6 +27,10 @@ public class ProfileUpdateRequest {
     @Size(max = 500, message = "自己紹介は500文字以内で入力してください")
     private String bio;
 
+    @NotBlank(message = "アイコン画像は必須です")
+    @Size(max = 500, message = "アイコン画像は255文字以内で入力してください")
+    private String imageName;
+
     @NotBlank(message = "メールは必須です")
     @Size(max = 255, message = "メールは255文字以内で入力してください")
     @Email(message = "メールは正しい形式で入力してください")

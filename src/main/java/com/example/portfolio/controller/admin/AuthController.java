@@ -1,5 +1,6 @@
 package com.example.portfolio.controller.admin;
 
+import com.example.portfolio.exception.AuthFailedException;
 import com.example.portfolio.request.AuthRequest;
 import com.example.portfolio.response.common.ApiErrorResponse;
 import com.example.portfolio.response.admin.AuthCheckResponse;
@@ -13,7 +14,12 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -63,7 +69,7 @@ public class AuthController {
 
     @Operation(
             summary = "ログイン認証",
-            description = "ユーザー名とパスワードでログインし、JWTトークンを取得します。",
+            description = "ユーザー名とパスワードで認証し、JWT を HttpOnly Cookie に返します",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
@@ -83,13 +89,51 @@ public class AuthController {
             }
     )
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
-        return ResponseEntity.ok(adminAuthService.login(request));
+    public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request, HttpServletResponse response) {
+        AuthResponse auth = adminAuthService.login(request);
+        // JWTをHttpOnly Cookieとしてセット
+        ResponseCookie cookie = ResponseCookie.from("jwt", auth.getToken())
+                .httpOnly(true)
+                .secure(false) // https利用時はtrueに
+                .path("/")
+                .sameSite("Lax")
+                .maxAge(3600)
+                .build();
+        response.setHeader(HttpHeaders.SET_COOKIE, cookie.toString());
+        return ResponseEntity.ok().build();
+    }
+
+    @Operation(
+            summary = "ログアウト",
+            description = "JWT Cookie を削除してログアウトします。",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "ログアウト成功"
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "未認証またはトークンが存在しない場合"
+                    )
+            }
+    )
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(HttpServletResponse response) {
+        ResponseCookie cookie = ResponseCookie.from("jwt", "")
+                .httpOnly(true)
+                .secure(false)
+                .path("/")
+                .maxAge(0)
+                .sameSite("Lax")
+                .build();
+
+        response.setHeader(HttpHeaders.SET_COOKIE, cookie.toString());
+        return ResponseEntity.ok().build();
     }
 
     @Operation(
             summary = "JWTトークン検証",
-            description = "Authorizationヘッダーに渡されたJWTトークンの有効性を確認します。",
+            description = "JWT CookieのJWTトークンの有効性を確認します。",
             parameters = {
                     @Parameter(
                             name = "Authorization",
@@ -112,10 +156,21 @@ public class AuthController {
             }
     )
     @GetMapping("/check")
-    public ResponseEntity<AuthCheckResponse> check(@RequestHeader("Authorization") String token)  {
-        if (token.startsWith("Bearer ")) {
-            token = token.substring(7);
+    public ResponseEntity<AuthCheckResponse> check(HttpServletRequest request) {
+        String token = null;
+        if (request.getCookies() != null) {
+            for (Cookie cookie : request.getCookies()) {
+                if ("jwt".equals(cookie.getName())) {
+                    token = cookie.getValue();
+                    break;
+                }
+            }
         }
+
+        if (token == null) {
+            throw new AuthFailedException("トークンが存在しません");
+        }
+
         return ResponseEntity.ok(jwtUtil.validateToken(token));
     }
 }

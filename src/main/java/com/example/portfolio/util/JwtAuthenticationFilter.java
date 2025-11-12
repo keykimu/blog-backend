@@ -3,6 +3,7 @@ package com.example.portfolio.util;
 import com.example.portfolio.response.admin.AuthCheckResponse;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
@@ -31,31 +32,28 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String method = request.getMethod();
 
         // プリフライト OPTIONS は認証スキップ
-        if ("OPTIONS".equalsIgnoreCase(method)) {
+        if ("OPTIONS".equalsIgnoreCase(method) ||
+                path.startsWith("/swagger-ui") ||
+                path.startsWith("/v3/api-docs") ||
+                isPublicEndpoint(path)
+        ) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        // Swagger UI と OpenAPI を除外
-        if (path.startsWith("/swagger-ui") || path.startsWith("/v3/api-docs")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-        // 認証不要なパスを除外
-        if (isPublicEndpoint(path, method)) {
-            filterChain.doFilter(request, response);
-            return;
+        String token = null;
+        if (request.getCookies() != null) {
+            for (Cookie c : request.getCookies()) {
+                if ("jwt".equals(c.getName())) {
+                    token = c.getValue();
+                }
+            }
         }
 
-        // 認証が必要な場合
-        String authHeader = request.getHeader("Authorization");
-
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+        if (token == null) {
             unauthorized(response, "認証トークンが必要です");
             return;
         }
-
-        String token = authHeader.substring(7);
 
         try {
             AuthCheckResponse auth = jwtUtil.validateToken(token);
@@ -67,9 +65,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     /** 公開エンドポイント判定 */
-    private boolean isPublicEndpoint(String path, String method) {
+    private boolean isPublicEndpoint(String path) {
         // 管理者ログインと管理者用API以外はすべて公開
-        return path.startsWith("/api/admin/auth/login") ||!path.startsWith("/api/admin");
+        return path.startsWith("/api/admin/auth/login") || !path.startsWith("/api/admin");
     }
 
     /** 認証失敗レスポンス */

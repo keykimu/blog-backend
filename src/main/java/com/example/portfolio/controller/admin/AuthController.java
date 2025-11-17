@@ -7,6 +7,7 @@ import com.example.portfolio.response.admin.AuthCheckResponse;
 import com.example.portfolio.response.admin.AuthResponse;
 import com.example.portfolio.response.admin.UserResponse;
 import com.example.portfolio.service.admin.AdminAuthService;
+import com.example.portfolio.util.CookieProperties;
 import com.example.portfolio.util.JwtUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -32,6 +33,8 @@ import java.util.List;
 public class AuthController {
     private final AdminAuthService adminAuthService;
     private final JwtUtil jwtUtil;
+    private final CookieProperties cookieSecure;
+    private final CookieProperties cookieSameSite;
 
     @Operation(
             summary = "管理者一覧取得",
@@ -94,9 +97,9 @@ public class AuthController {
         // JWTをHttpOnly Cookieとしてセット
         ResponseCookie cookie = ResponseCookie.from("jwt", auth.getToken())
                 .httpOnly(true)
-                .secure(false) // https利用時はtrueに
+                .secure(cookieSecure.isSecure()) // https利用時はtrueに
                 .path("/")
-                .sameSite("Lax")
+                .sameSite(cookieSameSite.getSameSite())
                 .maxAge(3600)
                 .build();
         response.setHeader(HttpHeaders.SET_COOKIE, cookie.toString());
@@ -121,10 +124,10 @@ public class AuthController {
     public ResponseEntity<Void> logout(HttpServletResponse response) {
         ResponseCookie cookie = ResponseCookie.from("jwt", "")
                 .httpOnly(true)
-                .secure(false)
+                .secure(cookieSecure.isSecure())
                 .path("/")
                 .maxAge(0)
-                .sameSite("Lax")
+                .sameSite(cookieSameSite.getSameSite())
                 .build();
 
         response.setHeader(HttpHeaders.SET_COOKIE, cookie.toString());

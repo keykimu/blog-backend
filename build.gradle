@@ -31,7 +31,7 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-	runtimeOnly 'org.postgresql:postgresql:42.6.0'
+	runtimeOnly 'org.postgresql:postgresql'
 
 	// Mybatis
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.5'
@@ -47,6 +47,9 @@ dependencies {
 	implementation 'com.auth0:java-jwt:4.2.1'
 	// パスワードハッシュ用
 	implementation 'org.springframework.security:spring-security-crypto:5.8.14'
+
+	// Flyway
+	implementation 'org.flywaydb:flyway-database-postgresql'
 }
 
 tasks.named('test') {

@@ -1,29 +1,36 @@
 # Portfolio API
 
 このリポジトリは、ポートフォリオサイト用のバックエンド API です。  
-Vue + TypeScript で作られたフロントエンド（管理者ページ・公開ページ）と連携してデータを提供します。
+Vue + TypeScript で作られたフロントエンド（公開ページ・管理者ページ）と連携してデータを提供します。
 
 ---
 
 ## 技術スタック
-- バックエンド: Spring Boot 3.5.6
+- バックエンド: Spring Boot / Java
 - データベース: PostgreSQL 15 (Docker)
-- ORM / DB マッピング: MyBatis 3.0.5
-- DTO マッピング: MapStruct 1.6.3
+- Webサーバー/リバースプロキシ:Nginx & Let's Encrypt(HTTPS)
+- DBマイグレーション:Flyway
+- ORM / DB マッピング: MyBatis
 - 認証: JWT (JSON Web Token)
-- コード簡略化: Lombok
-- API ドキュメント: Springdoc OpenAPI 2.8.13 + Swagger UI
+- API ドキュメント: Springdoc OpenAPI + Swagger UI
 - コンテナ管理: Docker, docker-compose
-- 言語: Java 21
-
 ---
 
-## 開発環境の構築
+## 認証・セキュリティ設定
 
-### 1. Docker で PostgreSQLとバックエンドを起動
+* **認証方式**: JWT (JSON Web Token) を採用しています。
+* **トークン管理**: 認証情報は、セキュリティを考慮し、セキュアなCookieを利用して管理しています。
+* **パスワード処理**: パスワードのハッシュ化には、業界標準の強力な暗号化アルゴリズムを採用しています。
+---
+
+## 開発環境の起動
+
+本プロジェクトは Docker Compose で構築されており、以下のコマンドで全コンポーネントを起動できます。
+
 ```bash
-docker-compose up --build
+docker compose up -d
 ```
+---
 
 ## 開発時の便利手順
 
@@ -39,12 +46,12 @@ docker-compose up --build
 
 ### 3. PostgreSQL に接続（開発用）
 ```bash
-docker exec -it portfolio-postgres psql -U postgres -d portfolio
+docker exec -it [DB_CONTAINER_NAME] psql -U [DB_USERNAME] -d [DB_NAME]
 ```
 
 ## Swagger / OpenAPI
 
-- 開発環境のみ有効化
-- URL: http://localhost:8080/swagger-ui.html
+- 開発環境のみ有効化（本番環境ではセキュリティ上の理由により無効）
+- URL: `http://localhost:8080/swagger-ui/index.html`
 - ここで API エンドポイント、リクエスト/レスポンス例を確認可能
-- Springdoc OpenAPI 2.8.13 を使用
+- Springdoc OpenAPI を使用

@@ -16,8 +16,8 @@ services:
       context: . # Dockerfileがある現在のディレクトリを指定
       dockerfile: Dockerfile
     container_name: portfolio-app
-    ports:
-      - "8080:8080" # ホストの8080ポートにアプリの8080ポートを公開
+#    ports:
+#      - "8080:8080" # ホストの8080ポートにアプリの8080ポートを公開
     env_file:
       - .env.${APP_ENV:-local} # DBと同じ環境変数をアプリにも渡す
     depends_on:

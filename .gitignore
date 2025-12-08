@@ -41,3 +41,6 @@ out/
 # Spring Boot
 application-debug.properties
 .env*
+
+docker-compose.override.yml
+nginx.local.conf

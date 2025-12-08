@@ -1,0 +1,8 @@
+services:
+nginx:
+  # 証明書をマウントし直す
+  volumes:
+    - ./certs/live/portfolio-api.kimuworks.dev:/etc/nginx/certs/live/portfolio-api.kimuworks.dev:ro
+    - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    - certbot-webroot:/var/www/certbot:ro
+    - ./nginx/certs:/etc/nginx/certs

@@ -44,3 +44,5 @@ application-debug.properties
 
 docker-compose.override.yml
 nginx.local.conf
+/build
+*.jar

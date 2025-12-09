@@ -52,6 +52,6 @@ docker exec -it [DB_CONTAINER_NAME] psql -U [DB_USERNAME] -d [DB_NAME]
 ## Swagger / OpenAPI
 
 - 開発環境のみ有効化（本番環境ではセキュリティ上の理由により無効）
-- URL: `http://localhost:8080/swagger-ui/index.html`
+- URL: `http://localhost/api/swagger-ui/index.html`
 - ここで API エンドポイント、リクエスト/レスポンス例を確認可能
 - Springdoc OpenAPI を使用

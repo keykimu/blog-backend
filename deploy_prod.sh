@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# --- 1. AWS Parameter Store から機密情報を取得 ---
+# --- AWS Parameter Store から機密情報を取得 ---
 # AWS CLI を使ってSecureStringパラメータを復号化して取得
 
 echo "Retrieving secrets from AWS Parameter Store..."
@@ -25,22 +25,36 @@ if [ -z "$DB_PASSWORD_FROM_AWS" ] || [ -z "$JWT_SECRET_FROM_AWS" ]; then
     exit 1
 fi
 
-echo "Secrets successfully retrieved."
-
-# --- 2. Docker Compose コマンドの実行 ---
-
 # 取得した変数を環境変数として渡し、prod設定で起動
 export DB_PASSWORD=${DB_PASSWORD_FROM_AWS}
 export JWT_SECRET=${JWT_SECRET_FROM_AWS}
 
+echo "Secrets successfully retrieved."
+
+
+# --- Docker コンテナ内でビルドを実行し、JARを取り出す ---
 echo "Building application JAR on EC2 host..."
 
-# 実行権限の確認と付与 (念のため)
-chmod +x gradlew
+# 既存の build/libs をクリーンアップ (古いJARが残らないように)
+rm -rf build/libs && mkdir -p build/libs
 
-# ホスト側でアプリケーションのビルドを実行
-./gradlew build -x test
+# Dockerfileの'builder'ステージのみを使用して一時イメージをビルド
+docker build -t portfolio-builder --target builder .
 
+# ビルド用の一時コンテナを作成し、ビルドを実行
+# ここでビルドが実行されるが、SSHが切れてもDockerデーモンが処理を継続する
+BUILD_CONTAINER=$(docker create portfolio-builder)
+
+# コンテナ内部のビルド結果 (/app/build/libs/にあるJAR)をホストの build/libs にコピー
+# JARファイル名が一つであることを前提
+docker cp $BUILD_CONTAINER:/app/build/libs/. build/libs/
+
+# 一時コンテナを削除
+docker rm $BUILD_CONTAINER
+
+
+# --- Docker Compose コマンドの実行 ---
+echo "JAR successfully extracted from builder container."
 docker compose \
   -f docker-compose.yml \
   -f docker-compose.prod.yml \

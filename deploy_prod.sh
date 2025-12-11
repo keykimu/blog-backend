@@ -35,6 +35,6 @@ JWT_SECRET=${JWT_SECRET_FROM_AWS} \
 docker compose \
   -f docker-compose.yml \
   -f docker-compose.prod.yml \
-  up -d --build --no-cache
+  up -d --build
 
 echo "Production services deployed."

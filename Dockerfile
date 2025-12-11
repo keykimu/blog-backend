@@ -1,3 +1,4 @@
+ARG BUILD_TIMEOUT=300
 # ステージ1: ビルダー
 FROM eclipse-temurin:21-jdk AS builder
 WORKDIR /app

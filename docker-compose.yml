@@ -17,6 +17,8 @@ services:
   app:
     build:
       context: . # Dockerfileがある現在のディレクトリを指定
+      args:
+        BUILD_TIMEOUT: 600
       dockerfile: Dockerfile
     container_name: portfolio-app
 #    ports:

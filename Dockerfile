@@ -2,7 +2,8 @@
 FROM eclipse-temurin:21-jdk AS builder
 WORKDIR /app
 # ビルドに必要なファイルだけをコピー
-COPY . . 
+COPY . .
+RUN chmod +x gradlew
 # Gradle のビルドを実行し、JARファイルを生成
 RUN ./gradlew build -x test
 

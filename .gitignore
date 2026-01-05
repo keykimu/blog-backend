@@ -46,3 +46,6 @@ docker-compose.override.yml
 nginx.local.conf
 /build
 *.jar
+
+# Cloudflare用の自己署名証明書（deploy_prod.shで生成されるもの）
+nginx/certs/

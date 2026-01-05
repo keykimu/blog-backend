@@ -8,9 +8,8 @@ RUN ./gradlew clean build -x test --no-daemon
 # ステージ2: 実行環境 (シンプルなコピー＆実行)
 FROM eclipse-temurin:21-jdk
 WORKDIR /app
-# ビルドステージから生成されたJARファイルのみをコピーする
-# ただし、今回は deploy.sh でJARを取り出すため、ここはホスト側のJARをコピーするように戻す
-# **[変更]** ステージ1からのコピーではなく、ホスト側の build/libs をコピーする
-COPY build/libs/*.jar app.jar
+
+# ホスト(PC)からではなく、上の 'builder' ステージから JAR を持ってくる
+COPY --from=builder /app/build/libs/*.jar app.jar
 
 ENTRYPOINT ["java", "-jar", "app.jar"]

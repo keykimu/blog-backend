@@ -27,7 +27,10 @@ services:
       db:
         condition: service_healthy
     restart: unless-stopped
+    volumes:
+      - ./logs:/app/logs
     environment:
+      LOGGING_FILE_NAME: /app/logs/application.log
       JWT_SECRET: ${JWT_SECRET}
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: portfolio_prod

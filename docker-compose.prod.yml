@@ -53,5 +53,5 @@ services:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./nginx/certs:/etc/letsencrypt:ro
 
-  volumes:
-    db_data:
+volumes:
+  db_data:

@@ -49,3 +49,6 @@ nginx.local.conf
 
 # Cloudflare用の自己署名証明書（deploy_prod.shで生成されるもの）
 nginx/certs/
+
+# アプリのログファイルを無視
+/logs/

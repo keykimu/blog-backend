@@ -1,0 +1,9 @@
+/home/ec2-user/portfolio/backend/blog-backend/script/backup.log {
+    daily
+    rotate 7
+    compress
+    missingok
+    notifempty
+    copytruncate
+    su ec2-user ec2-user
+}

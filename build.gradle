@@ -59,3 +59,15 @@ tasks.named('test') {
 bootRun {
 	args = ["--spring.profiles.active=local"]
 }
+
+test {
+	useJUnitPlatform()
+
+	jvmArgs(
+			"-XX:+EnableDynamicAgentLoading",
+	)
+
+	testLogging {
+		showStandardStreams = true
+	}
+}

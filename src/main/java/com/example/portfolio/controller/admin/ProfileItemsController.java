@@ -27,11 +27,7 @@ public class ProfileItemsController {
             @ApiResponse(responseCode = "200", description = "取得成功"),
             @ApiResponse(responseCode = "400", description = "バリデーションエラー",
                     content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
-            ),
-            @ApiResponse(responseCode = "500", description = "サーバーエラー",
-                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
-
-         )
+            )
     })
     @GetMapping
     public ResponseEntity<ProfileItemsResponse> getAllByUserId(HttpServletRequest request) {
@@ -43,9 +39,6 @@ public class ProfileItemsController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "登録成功"),
             @ApiResponse(responseCode = "400", description = "バリデーションエラー",
-                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
-            ),
-            @ApiResponse(responseCode = "500", description = "サーバーエラー",
                     content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
             )
     })

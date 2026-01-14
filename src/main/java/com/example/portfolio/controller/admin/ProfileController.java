@@ -31,9 +31,6 @@ public class ProfileController {
             ),
             @ApiResponse(responseCode = "404", description = "対象が存在しない",
                     content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
-            ),
-            @ApiResponse(responseCode = "500", description = "サーバーエラー",
-                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
             )
     })
     @GetMapping
@@ -52,9 +49,6 @@ public class ProfileController {
                     content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
             ),
             @ApiResponse(responseCode = "404", description = "対象が存在しない",
-                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
-            ),
-            @ApiResponse(responseCode = "500", description = "サーバーエラー",
                     content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
             )
     })

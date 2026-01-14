@@ -57,11 +57,6 @@ public class AuthController {
                             responseCode = "401",
                             description = "認証エラー（トークン無効・期限切れ）",
                             content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
-                    ),
-                    @ApiResponse(
-                            responseCode = "500",
-                            description = "サーバーエラー",
-                            content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
                     )
             }
     )

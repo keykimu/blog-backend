@@ -10,8 +10,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Collections;
+
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(PublicSkillsController.class)
@@ -27,5 +30,19 @@ class PublicSkillsControllerTest {
     void shouldReturnPublicSkills() throws Exception {
         when(publicSkillsService.getAllByUserId()).thenReturn(new PublicSkillsResponse());
         mockMvc.perform(get("/api/skills")).andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("スキル情報が登録されていない場合でも空のリストで200を返すこと")
+    void shouldReturnEmptyListsWhenNoSkills() throws Exception {
+        PublicSkillsResponse emptyResponse = new PublicSkillsResponse();
+        emptyResponse.setLanguageResponse(Collections.emptyList());
+        // 全て空のリストをセットした状態
+        when(publicSkillsService.getAllByUserId()).thenReturn(emptyResponse);
+
+        mockMvc.perform(get("/api/skills"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.languageResponse").isArray())  // 配列であること
+                .andExpect(jsonPath("$.languageResponse").isEmpty()); // 空であること
     }
 }

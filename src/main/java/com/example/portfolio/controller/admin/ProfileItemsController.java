@@ -24,10 +24,7 @@ public class ProfileItemsController {
     private final AdminProfileItemsService adminProfileItemsService;
     @Operation(summary = "趣味・経歴・イベント・資格を取得")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "取得成功"),
-            @ApiResponse(responseCode = "400", description = "バリデーションエラー",
-                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
-            )
+            @ApiResponse(responseCode = "200", description = "取得成功")
     })
     @GetMapping
     public ResponseEntity<ProfileItemsResponse> getAllByUserId(HttpServletRequest request) {

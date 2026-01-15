@@ -55,7 +55,7 @@ class AuthControllerTest {
     @DisplayName("ログアウト時にJWTクッキーが削除されること")
     void logout_ShouldReturnOkAndClearCookie() throws Exception {
         String mockToken = "valid-token";
-        // ログアウトも認証が必要な場合は、ここでもJwtUtilをモックするわ
+        // ログアウトも認証が必要な場合は、ここでもJwtUtilをモックする
         when(jwtUtil.validateToken(mockToken)).thenReturn(new AuthCheckResponse(1L, "admin"));
         when(cookieProperties.getSameSite()).thenReturn("localhost");
 

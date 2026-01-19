@@ -52,3 +52,6 @@ nginx/certs/
 
 # アプリのログファイルを無視
 /logs/
+
+# ログファイルの除外
+script/*.log

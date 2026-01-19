@@ -1,5 +1,13 @@
 #!/bin/bash
 
+# エラーが発生したら即座に停止
+set -e
+
+echo "Cleaning up old docker resources to save space..."
+# 実行中でないコンテナと、タグのない古いイメージ（ビルドキャッシュ等）を削除
+# DBのボリューム（データ）は守りつつ、容量を確保
+docker image prune -f
+
 # AWS Parameter Store から機密情報を取得
 # AWS CLI を使ってSecureStringパラメータを復号化して取得
 echo "Retrieving secrets from AWS Parameter Store..."
@@ -31,31 +39,9 @@ export JWT_SECRET=${JWT_SECRET_FROM_AWS}
 echo "Secrets successfully retrieved."
 
 
-# Docker コンテナ内でビルドを実行し、JARを取り出す
-echo "Building application JAR on EC2 host..."
-
-# 既存の build/libs をクリーンアップ (古いJARが残らないように)
-rm -rf build/libs && mkdir -p build/libs
-
-# Dockerfileの'builder'ステージのみを使用して一時イメージをビルド
-docker build -t portfolio-builder --target builder .
-
-# ビルド用の一時コンテナを作成し、ビルドを実行
-# ここでビルドが実行されるが、SSHが切れてもDockerデーモンが処理を継続する
-BUILD_CONTAINER=$(docker create portfolio-builder)
-
-# コンテナ内部のビルド結果 (/app/build/libs/にあるJAR)をホストの build/libs にコピー
-# JARファイル名が一つであることを前提
-docker cp $BUILD_CONTAINER:/app/build/libs/. build/libs/
-
-# 一時コンテナを削除
-docker rm $BUILD_CONTAINER
-
 # 証明書の保存先パス
 CERT_DIR="./nginx/certs/live/portfolio-api.kimuworks.dev"
 
-# ダミー証明書がなければ作る
-CERT_DIR="./nginx/certs/live/portfolio-api.kimuworks.dev"
 if [ ! -f "$CERT_DIR/fullchain.pem" ]; then
     echo "Creating 10-year self-signed certificate for Cloudflare..."
     sudo mkdir -p "$CERT_DIR"
@@ -67,7 +53,11 @@ if [ ! -f "$CERT_DIR/fullchain.pem" ]; then
 fi
 
 # デプロイ実行
-echo "Deploying with secure & simplified configuration..."
+# --build でソースの変更を反映し、--remove-orphans で古い不要なコンテナを削除
+echo "Building and Deploying with Docker Compose..."
 docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build --remove-orphans
+
+# ビルドが終わって不要になった中間イメージを再度掃除
+docker image prune -f
 
 echo "Deployment completed! Secured by Self-signed cert & Cloudflare."

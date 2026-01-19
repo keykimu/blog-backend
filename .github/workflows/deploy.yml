@@ -1,0 +1,33 @@
+name: Deploy to EC2
+
+# mainブランチにpushされた時に動く
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Secretsを使ってSSH接続し、コマンドを実行
+      - name: Deploy to EC2 via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd ~/portfolio/backend/blog-backend/
+            git pull origin main
+            if [ -f deploy_prod.sh ]; then
+              chmod +x deploy_prod.sh
+              ./deploy_prod.sh
+            else
+              # shがない場合の予備コマンド
+              docker compose up --build -d
+            fi

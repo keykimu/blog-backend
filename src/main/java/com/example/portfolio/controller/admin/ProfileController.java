@@ -26,13 +26,7 @@ public class ProfileController {
     @Operation(summary = "プロフィールを取得")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "取得成功"),
-            @ApiResponse(responseCode = "400", description = "バリデーションエラー",
-                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
-            ),
             @ApiResponse(responseCode = "404", description = "対象が存在しない",
-                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
-            ),
-            @ApiResponse(responseCode = "500", description = "サーバーエラー",
                     content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
             )
     })
@@ -52,9 +46,6 @@ public class ProfileController {
                     content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
             ),
             @ApiResponse(responseCode = "404", description = "対象が存在しない",
-                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
-            ),
-            @ApiResponse(responseCode = "500", description = "サーバーエラー",
                     content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
             )
     })

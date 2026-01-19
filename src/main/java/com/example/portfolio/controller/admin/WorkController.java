@@ -29,13 +29,7 @@ public class WorkController {
 
     @Operation(summary = "成果物をまとめて取得")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "取得成功"),
-            @ApiResponse(responseCode = "400", description = "バリデーションエラー",
-                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
-            ),
-            @ApiResponse(responseCode = "500", description = "サーバーエラー",
-                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
-            )
+            @ApiResponse(responseCode = "200", description = "取得成功")
     })
     @GetMapping
     public ResponseEntity<List<WorkResponse>> getAll(HttpServletRequest request) {
@@ -48,12 +42,6 @@ public class WorkController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "取得成功"),
             @ApiResponse(responseCode = "403", description = "他人のデータは操作できません",
-                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
-            ),
-            @ApiResponse(responseCode = "404", description = "バリデーションエラー",
-                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
-            ),
-            @ApiResponse(responseCode = "500", description = "サーバーエラー",
                     content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
             )
     })
@@ -72,9 +60,6 @@ public class WorkController {
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "取得作成"),
             @ApiResponse(responseCode = "400", description = "バリデーションエラー",
-                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
-            ),
-            @ApiResponse(responseCode = "500", description = "サーバーエラー",
                     content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
             )
     })
@@ -96,9 +81,6 @@ public class WorkController {
             ),
             @ApiResponse(responseCode = "404", description = "対象が存在しない",
                     content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
-            ),
-            @ApiResponse(responseCode = "500", description = "サーバーエラー",
-                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
             )
     })
     @PutMapping("/{id}")
@@ -115,16 +97,10 @@ public class WorkController {
     @Operation(summary = "成果物を削除")
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "削除成功"),
-            @ApiResponse(responseCode = "400", description = "バリデーションエラー",
-                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
-            ),
             @ApiResponse(responseCode = "403", description = "他人のデータは操作できません",
                     content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
             ),
             @ApiResponse(responseCode = "404", description = "対象が存在しない",
-                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
-            ),
-            @ApiResponse(responseCode = "500", description = "サーバーエラー",
                     content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
             )
     })

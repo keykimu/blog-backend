@@ -25,13 +25,7 @@ public class SkillsController {
 
     @Operation(summary = "言語・フレームワーク・その他を取得")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "取得成功"),
-            @ApiResponse(responseCode = "400", description = "バリデーションエラー",
-                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
-            ),
-            @ApiResponse(responseCode = "500", description = "サーバーエラー",
-                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
-            )
+            @ApiResponse(responseCode = "200", description = "取得成功")
     })
     @GetMapping
     public ResponseEntity<SkillsResponse> getAll(HttpServletRequest request) {
@@ -43,9 +37,6 @@ public class SkillsController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "登録成功"),
             @ApiResponse(responseCode = "400", description = "バリデーションエラー",
-                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
-            ),
-            @ApiResponse(responseCode = "500", description = "サーバーエラー",
                     content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
             )
     })

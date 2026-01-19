@@ -24,14 +24,7 @@ public class PublicProfileItemController {
 
     @Operation(summary = "公開用趣味・経歴・イベント・資格を取得")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "取得成功"),
-            @ApiResponse(responseCode = "400", description = "バリデーションエラー",
-                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
-            ),
-            @ApiResponse(responseCode = "500", description = "サーバーエラー",
-                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
-
-            )
+            @ApiResponse(responseCode = "200", description = "取得成功")
     })
     @GetMapping
     public ResponseEntity<PublicProfileItemsResponse> getAllByUserId() {

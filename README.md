@@ -8,18 +8,35 @@ Vue + TypeScript で作られたフロントエンド（公開ページ・管理
 ## 技術スタック
 - バックエンド: Spring Boot / Java
 - データベース: PostgreSQL 15 (Docker)
-- Webサーバー/リバースプロキシ:Nginx & Let's Encrypt(HTTPS)
 - DBマイグレーション:Flyway
 - ORM / DB マッピング: MyBatis
-- 認証: JWT (JSON Web Token)
 - API ドキュメント: Springdoc OpenAPI + Swagger UI
 - コンテナ管理: Docker, docker-compose
 ---
 
-## 認証・セキュリティ設定
-* **認証方式**: JWT (JSON Web Token) を採用しています。
-* **トークン管理**: 認証情報は、セキュリティを考慮し、セキュアなCookieを利用して管理しています。
-* **パスワード処理**: パスワードのハッシュ化には、業界標準の強力な暗号化アルゴリズムを採用しています。
+## インフラ・セキュリティ
+- Webサーバー/リバースプロキシ: Nginx
+- SSL/TLS: Cloudflare (Full Mode) + 自己署名証明書による Origin Shielding
+- ネットワーク: AWS セキュリティグループによる Cloudflare IP 帯域制限
+- 機密情報管理: AWS Systems Manager (Parameter Store) による環境変数の秘匿化
+---
+
+## 認証・認可
+- 認証方式: JWT (JSON Web Token) を採用
+- トークン管理: セキュアCookie（HttpOnly / Secure / SameSite）を利用した堅牢な管理
+- パスワード処理: パスワードのハッシュ化には、業界標準の強力な暗号化アルゴリズム(BCrypt)を採用
+---
+
+## CI/CD・運用
+- CI/CD: GitHub Actions による継続的デプロイ (CD)
+- main ブランチへのプッシュを検知し、EC2 上でビルド・デプロイを自動実行
+- データベース管理: シェルスクリプトによる定期バックアップを実行し、AWS S3へ外部保存することでデータの冗長性を確保
+- ログ管理: Dockerボリュームとホスト側の logrotate を連携させ、ディスク容量を圧迫しないようログの世代管理・自動削除を実施
+---
+
+## テスト
+- 単体・結合テスト: JUnit 5, Mockito
+- APIテスト: curl および Swagger UI による検証
 ---
 
 ## 開発環境の起動

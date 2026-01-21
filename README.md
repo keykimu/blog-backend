@@ -14,6 +14,47 @@ Vue + TypeScript で作られたフロントエンド（公開ページ・管理
 - コンテナ管理: Docker, docker-compose
 ---
 
+## システム構成図
+```mermaid
+flowchart TB
+    subgraph Internet ["Internet"]
+        Users((Users))
+    end
+
+    subgraph Cloudflare ["Cloudflare"]
+        WAF[WAF / DNS / SSL]
+    end
+
+    subgraph VPC ["VPC"]
+        subgraph EC2 ["EC2"]
+            subgraph Docker_Network ["Docker Compose"]
+                NGX[Nginx]
+                APP[Spring Boot App]
+                DB[(PostgreSQL)]
+            end
+            DP_SH[deploy_prod.sh]
+        end
+        S3[(S3)]
+        SSM[Parameter Store]
+    end
+
+    subgraph Automation ["Automation"]
+        GHA[GitHub Actions]
+    end
+
+    %% Data Flow
+    Users --> Cloudflare
+    WAF -- "HTTPS (Origin Shielding)" --> NGX
+    NGX --> APP
+    APP --> DB
+
+    %% Operation Flow
+    GHA -- "SSH Deploy" --> DP_SH
+    DP_SH -- "1. Get Secrets" --> SSM
+    DP_SH -- "2. Set Env & Build" --> APP
+    DB -- "Backup" --> S3
+```
+
 ## インフラ・セキュリティ
 - Webサーバー/リバースプロキシ: Nginx
 - SSL/TLS: Cloudflare (Full Mode) + 自己署名証明書による Origin Shielding

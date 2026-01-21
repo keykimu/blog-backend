@@ -54,6 +54,36 @@ flowchart TB
     DP_SH -- "2. Set Env & Build" --> APP
     DB -- "Backup" --> S3
 ```
+## ER図
+```mermaid
+erDiagram
+    USERS ||--|| PROFILE : ""
+    USERS ||--o{ HOBBIES : ""
+    USERS ||--o{ CAREERS : ""
+    USERS ||--o{ EVENTS : ""
+    USERS ||--o{ CERTIFICATES : ""
+    USERS ||--o{ LANGUAGES : ""
+    USERS ||--o{ FRAMEWORKS : ""
+    USERS ||--o{ OTHER_SKILLS : ""
+    USERS ||--o{ WORKS : ""
+
+    USERS {
+        string username
+        timestamp last_login_at
+    }
+    PROFILE {
+        string name
+        string nickname
+        text bio
+        string image_name
+    }
+    WORKS {
+        string title
+        text description
+        string tech_stack
+        string url
+    }
+```
 
 ## インフラ・セキュリティ
 - Webサーバー/リバースプロキシ: Nginx

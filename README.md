@@ -11,7 +11,7 @@ Vue + TypeScript で作られたフロントエンド（公開ページ・管理
 - DBマイグレーション:Flyway
 - ORM / DB マッピング: MyBatis
 - API ドキュメント: Springdoc OpenAPI + Swagger UI
-- コンテナ管理: Docker, docker-compose
+- コンテナ管理: Docker, Docker Compose
 ---
 
 ## システム構成図

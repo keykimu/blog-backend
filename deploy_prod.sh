@@ -3,6 +3,10 @@
 # エラーが発生したら即座に停止
 set -e
 
+echo "Syncing source code with GitHub..."
+cd /home/ec2-user/portfolio/backend/blog-backend/
+git pull origin main
+
 echo "Cleaning up old docker resources to save space..."
 # 実行中でないコンテナと、タグのない古いイメージ（ビルドキャッシュ等）を削除
 # DBのボリューム（データ）は守りつつ、容量を確保

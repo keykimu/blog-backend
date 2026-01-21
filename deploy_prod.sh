@@ -8,6 +8,10 @@ echo "Cleaning up old docker resources to save space..."
 # DBのボリューム（データ）は守りつつ、容量を確保
 docker image prune -f
 
+# 古いビルドキャッシュを削除
+# 直近24時間以内のキャッシュは残して高速化しつつ、古いゴミだけ消す
+docker builder prune -f --filter "until=24h"
+
 # AWS Parameter Store から機密情報を取得
 # AWS CLI を使ってSecureStringパラメータを復号化して取得
 echo "Retrieving secrets from AWS Parameter Store..."

@@ -7,15 +7,15 @@ import com.example.portfolio.response.admin.AuthCheckResponse;
 import com.example.portfolio.response.admin.ProfileItemsResponse;
 import com.example.portfolio.service.admin.AdminProfileItemsService;
 import com.example.portfolio.util.JwtUtil;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.util.List;
 
@@ -34,7 +34,7 @@ class ProfileItemsControllerTest {
     private AdminProfileItemsService adminProfileItemsService;
     @MockitoBean private JwtUtil jwtUtil;
     @Autowired
-    private ObjectMapper objectMapper;
+    private JsonMapper mapper;
 
     @Test
     @DisplayName("管理者プロフィール項目一覧が取得できること")
@@ -80,7 +80,7 @@ class ProfileItemsControllerTest {
                         .cookie(new Cookie("jwt", mockToken))
                         .requestAttr("userId", userId)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(invalidRequest)))
+                        .content(mapper.writeValueAsString(invalidRequest)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value("VALIDATION_ERROR"))
                 .andExpect(jsonPath("$.error").value(containsString("趣味名は必須です")));
@@ -91,7 +91,7 @@ class ProfileItemsControllerTest {
     void shouldReturn401WhenNoCookieOnSaveProfileItems() throws Exception {
         mockMvc.perform(post("/api/admin/profile-items")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(new ProfileItemsRequest())))
+                        .content(mapper.writeValueAsString(new ProfileItemsRequest())))
                 .andExpect(status().isUnauthorized());
     }
 }

@@ -6,15 +6,15 @@ import com.example.portfolio.response.admin.AuthCheckResponse;
 import com.example.portfolio.response.admin.ProfileResponse;
 import com.example.portfolio.service.admin.AdminProfileService;
 import com.example.portfolio.util.JwtUtil;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import tools.jackson.databind.json.JsonMapper;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
@@ -34,7 +34,7 @@ class ProfileControllerTest {
     @MockitoBean
     private JwtUtil jwtUtil;
     @Autowired
-    private ObjectMapper objectMapper;
+    private JsonMapper mapper;
 
     @Test
     @DisplayName("管理者プロフィール情報が正常に取得できること")
@@ -91,7 +91,7 @@ class ProfileControllerTest {
                         .cookie(new Cookie("jwt", mockToken))
                         .requestAttr("userId", userId)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(invalidRequest)))
+                        .content(mapper.writeValueAsString(invalidRequest)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value("VALIDATION_ERROR"))
                 .andExpect(jsonPath("$.error").value(containsString("名前は必須です")));
@@ -115,7 +115,7 @@ class ProfileControllerTest {
                         .cookie(new Cookie("jwt", mockToken))
                         .requestAttr("userId", userId)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(createValidRequest())))
+                        .content(mapper.writeValueAsString(createValidRequest())))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.code").value("NOT_FOUND"));
     }
@@ -126,7 +126,7 @@ class ProfileControllerTest {
         // cookie() をあえて指定せずにリクエスト
         mockMvc.perform(put("/api/admin/profile/{id}", 1L)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(createValidRequest())))
+                        .content(mapper.writeValueAsString(createValidRequest())))
                 .andExpect(status().isUnauthorized());
     }
 

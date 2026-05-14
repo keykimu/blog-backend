@@ -6,17 +6,17 @@ import com.example.portfolio.response.admin.AuthCheckResponse;
 import com.example.portfolio.response.admin.WorkResponse;
 import com.example.portfolio.service.admin.AdminWorkService;
 import com.example.portfolio.util.JwtUtil;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.server.ResponseStatusException;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.util.List;
 
@@ -38,7 +38,7 @@ class WorkControllerTest {
     private AdminWorkService adminWorkService;
     @MockitoBean private JwtUtil jwtUtil;
     @Autowired
-    private ObjectMapper objectMapper;
+    private JsonMapper mapper;
 
     @Test
     @DisplayName("管理者用の成果物一覧が取得できること")
@@ -134,7 +134,7 @@ class WorkControllerTest {
                         .cookie(new Cookie("jwt", mockToken))
                         .requestAttr("userId", userId)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
+                        .content(mapper.writeValueAsString(request)))
                 .andExpect(status().isCreated()) // ここが 201 よ！
                 .andExpect(jsonPath("$.id").value(100L))
                 .andExpect(jsonPath("$.title").value("マイポートフォリオ"));
@@ -155,7 +155,7 @@ class WorkControllerTest {
                         .cookie(new Cookie("jwt", mockToken))
                         .requestAttr("userId", userId)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(invalidRequest)))
+                        .content(mapper.writeValueAsString(invalidRequest)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value("VALIDATION_ERROR"));
     }
@@ -165,7 +165,7 @@ class WorkControllerTest {
     void shouldReturn401WhenNoCookieOnCreate() throws Exception {
         mockMvc.perform(post("/api/admin/works")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(new WorkCreateRequest())))
+                        .content(mapper.writeValueAsString(new WorkCreateRequest())))
                 .andExpect(status().isUnauthorized());
     }
 
@@ -193,7 +193,7 @@ class WorkControllerTest {
                         .cookie(new Cookie("jwt", mockToken))
                         .requestAttr("userId", userId)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
+                        .content(mapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title").value("更新後のタイトル"));
     }
@@ -213,7 +213,7 @@ class WorkControllerTest {
                         .cookie(new Cookie("jwt", mockToken))
                         .requestAttr("userId", userId)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(invalidRequest)))
+                        .content(mapper.writeValueAsString(invalidRequest)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value("VALIDATION_ERROR"));
     }
@@ -237,7 +237,7 @@ class WorkControllerTest {
                         .cookie(new Cookie("jwt", mockToken))
                         .requestAttr("userId", userId)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(validRequest)))
+                        .content(mapper.writeValueAsString(validRequest)))
                 .andExpect(status().isForbidden());
     }
 
@@ -259,7 +259,7 @@ class WorkControllerTest {
                         .cookie(new Cookie("jwt", mockToken))
                         .requestAttr("userId", userId)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(validRequest)))
+                        .content(mapper.writeValueAsString(validRequest)))
                 .andExpect(status().isNotFound());
     }
 
@@ -268,7 +268,7 @@ class WorkControllerTest {
     void shouldReturn401WhenNoCookieOnUpdate() throws Exception {
         mockMvc.perform(put("/api/admin/works/{id}", 10L)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(new WorkUpdateRequest())))
+                        .content(mapper.writeValueAsString(new WorkUpdateRequest())))
                 .andExpect(status().isUnauthorized());
     }
 

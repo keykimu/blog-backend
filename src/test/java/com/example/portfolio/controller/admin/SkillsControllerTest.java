@@ -7,15 +7,15 @@ import com.example.portfolio.response.admin.AuthCheckResponse;
 import com.example.portfolio.response.admin.SkillsResponse;
 import com.example.portfolio.service.admin.AdminSkillsService;
 import com.example.portfolio.util.JwtUtil;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.util.List;
 
@@ -35,7 +35,7 @@ class SkillsControllerTest {
     private AdminSkillsService adminSkillsService;
     @MockitoBean private JwtUtil jwtUtil;
     @Autowired
-    private ObjectMapper objectMapper;
+    private JsonMapper mapper;
 
     @Test
     @DisplayName("スキル一覧が正常に取得できること")
@@ -82,7 +82,7 @@ class SkillsControllerTest {
                         .cookie(new Cookie("jwt", mockToken))
                         .requestAttr("userId", userId)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
+                        .content(mapper.writeValueAsString(request)))
                 .andExpect(status().isOk());
     }
 
@@ -106,7 +106,7 @@ class SkillsControllerTest {
                         .cookie(new Cookie("jwt", mockToken))
                         .requestAttr("userId", userId)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(invalidRequest)))
+                        .content(mapper.writeValueAsString(invalidRequest)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value("VALIDATION_ERROR"));
     }
@@ -116,7 +116,7 @@ class SkillsControllerTest {
     void shouldReturn401WhenNoCookieOnSaveSkills() throws Exception {
         mockMvc.perform(post("/api/admin/skills")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(new SkillsRequest())))
+                        .content(mapper.writeValueAsString(new SkillsRequest())))
                 .andExpect(status().isUnauthorized());
     }
 }

@@ -29,12 +29,12 @@
         WHERE id = #{id}
     </select>
 
-    <insert id="insert" parameterType="com.example.portfolio.request.WorkCreateRequest" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" parameterType="com.example.portfolio.entity.Work" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO works (user_id, title, description, tech_stack, url, created_at, updated_at)
         VALUES (#{userId}, #{title}, #{description}, #{techStack}, #{url}, now(), now())
     </insert>
 
-    <update id="update" parameterType="com.example.portfolio.request.WorkCreateRequest">
+    <update id="update" parameterType="com.example.portfolio.entity.Work">
         UPDATE works
         SET title=#{title},
         description=#{description},

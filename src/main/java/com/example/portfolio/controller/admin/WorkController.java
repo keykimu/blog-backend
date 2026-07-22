@@ -13,12 +13,18 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @Tag(name = "Work", description = "成果物情報 API")
@@ -26,6 +32,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WorkController {
     private final AdminWorkService adminWorkService;
+    private final Validator validator;
 
     @Operation(summary = "成果物をまとめて取得")
     @ApiResponses({
@@ -63,8 +70,24 @@ public class WorkController {
                     content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
             )
     })
-    @PostMapping
-    public ResponseEntity<WorkResponse> create(@Valid @RequestBody WorkCreateRequest createRequest, HttpServletRequest request) {
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<WorkResponse> create(
+            @RequestParam("title") String title,
+            @RequestParam("description") String description,
+            @RequestParam(value = "techStack", required = false) String techStack,
+            @RequestParam(value = "file", required = false) MultipartFile file,
+            HttpServletRequest request) {
+        WorkCreateRequest createRequest = new WorkCreateRequest();
+        createRequest.setTitle(title);
+        createRequest.setDescription(description);
+        createRequest.setTechStack(techStack);
+        createRequest.setFile(file);
+
+        Set<ConstraintViolation<WorkCreateRequest>> violations = validator.validate(createRequest);
+        if (!violations.isEmpty()) {
+            throw new ConstraintViolationException(violations);
+        }
+
         Long userId = (Long) request.getAttribute("userId");
         WorkResponse createdWork = adminWorkService.createWork(createRequest,userId);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdWork);
@@ -84,7 +107,7 @@ public class WorkController {
             )
     })
     @PutMapping("/{id}")
-    public ResponseEntity<WorkResponse> update(@PathVariable Long id, @Valid @RequestBody WorkUpdateRequest updateRequest, HttpServletRequest request) {
+    public ResponseEntity<WorkResponse> update(@PathVariable Long id, @Valid @ModelAttribute WorkUpdateRequest updateRequest, HttpServletRequest request) {
         Long userId = (Long) request.getAttribute("userId");
         WorkResponse updatedWork = adminWorkService.updateWork(id,updateRequest,userId);
         if (updatedWork != null) {

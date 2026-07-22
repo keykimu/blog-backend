@@ -1,6 +1,7 @@
 package com.example.portfolio.exception;
 
 import com.example.portfolio.response.common.ApiErrorResponse;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -69,6 +70,23 @@ public class GlobalExceptionHandler {
                 firstErrorMessage
         );
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ApiErrorResponse> handleConstraintViolation(
+            ConstraintViolationException ex) {
+        String firstErrorMessage = ex.getConstraintViolations()
+                .stream()
+                .findFirst()
+                .map(violation -> violation.getMessage())
+                .orElse("入力値に誤りがあります");
+
+        ApiErrorResponse body = new ApiErrorResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                "VALIDATION_ERROR",
+                firstErrorMessage
+        );
+        return ResponseEntity.badRequest().body(body);
     }
 
     /**

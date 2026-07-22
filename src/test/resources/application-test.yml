@@ -4,3 +4,9 @@ spring:
     driver-class-name: org.h2.Driver
   flyway:
     enabled: false
+
+minio:
+  endpoint: http://localhost:9000
+  access-key: minioadmin
+  secret-key: minioadmin
+  bucket-name: test-storage

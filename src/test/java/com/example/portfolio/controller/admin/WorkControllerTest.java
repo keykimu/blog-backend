@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.server.ResponseStatusException;
@@ -23,10 +24,7 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -120,9 +118,12 @@ class WorkControllerTest {
         String mockToken = "valid-token";
         when(jwtUtil.validateToken(mockToken)).thenReturn(new AuthCheckResponse(userId, mockToken));
 
-        WorkCreateRequest request = new WorkCreateRequest();
-        request.setTitle("マイポートフォリオ");
-        request.setDescription("Spring Bootで作った作品です");
+        MockMultipartFile mockMultipartFile = new MockMultipartFile(
+                "file",
+                "test.png",
+                MediaType.IMAGE_PNG_VALUE,
+                "dumy image content".getBytes()
+        );
 
         WorkResponse mockResponse = new WorkResponse();
         mockResponse.setId(100L);
@@ -130,11 +131,13 @@ class WorkControllerTest {
 
         when(adminWorkService.createWork(any(WorkCreateRequest.class), eq(userId))).thenReturn(mockResponse);
 
-        mockMvc.perform(post("/api/admin/works")
+        mockMvc.perform(multipart("/api/admin/works")
+                        .file(mockMultipartFile)
+                        .param("title","マイポートフォリオ")
+                        .param("description","Spring bootで作った作品です")
                         .cookie(new Cookie("jwt", mockToken))
                         .requestAttr("userId", userId)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(mapper.writeValueAsString(request)))
+                        .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().isCreated()) // ここが 201 よ！
                 .andExpect(jsonPath("$.id").value(100L))
                 .andExpect(jsonPath("$.title").value("マイポートフォリオ"));
@@ -151,11 +154,17 @@ class WorkControllerTest {
         invalidRequest.setTitle("");
         invalidRequest.setDescription("説明はあるけどタイトルがない");
 
-        mockMvc.perform(post("/api/admin/works")
+        MockMultipartFile mockMultipartFile = new MockMultipartFile(
+                "file","test.png", MediaType.IMAGE_PNG_VALUE,"dumy".getBytes()
+        );
+
+        mockMvc.perform(multipart("/api/admin/works")
+                        .file(mockMultipartFile)
+                        .param("title","")
+                        .param("description","説明はあるがタイトルがない")
                         .cookie(new Cookie("jwt", mockToken))
                         .requestAttr("userId", userId)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(mapper.writeValueAsString(invalidRequest)))
+                        .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value("VALIDATION_ERROR"));
     }
@@ -163,9 +172,14 @@ class WorkControllerTest {
     @Test
     @DisplayName("クッキーがない場合に作成を拒否し401を返すこと")
     void shouldReturn401WhenNoCookieOnCreate() throws Exception {
-        mockMvc.perform(post("/api/admin/works")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(mapper.writeValueAsString(new WorkCreateRequest())))
+        MockMultipartFile mockMultipartFile = new MockMultipartFile(
+                "file","test.png", MediaType.IMAGE_PNG_VALUE,"dumy".getBytes()
+        );
+
+        mockMvc.perform(multipart("/api/admin/works")
+                        .file(mockMultipartFile)
+                        .param("title","タイトル")
+                        .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().isUnauthorized());
     }
 
@@ -178,9 +192,9 @@ class WorkControllerTest {
         String mockToken = "valid-token";
         when(jwtUtil.validateToken(mockToken)).thenReturn(new AuthCheckResponse(userId, mockToken));
 
-        WorkUpdateRequest request = new WorkUpdateRequest();
-        request.setTitle("更新後のタイトル");
-        request.setDescription("更新後の説明文です");
+        MockMultipartFile mockFile = new MockMultipartFile(
+                "file", "update.png", MediaType.IMAGE_PNG_VALUE, "updated content".getBytes()
+        );
 
         WorkResponse mockResponse = new WorkResponse();
         mockResponse.setId(workId);
@@ -189,11 +203,14 @@ class WorkControllerTest {
         when(adminWorkService.updateWork(eq(workId), any(WorkUpdateRequest.class), eq(userId)))
                 .thenReturn(mockResponse);
 
-        mockMvc.perform(put("/api/admin/works/{id}", workId)
+        mockMvc.perform(multipart("/api/admin/works/{id}", workId)
+                        .file(mockFile)
+                        .param("title", "更新後のタイトル")
+                        .param("description", "更新後の説明文です")
+                        .with(request -> { request.setMethod("PUT"); return request; }) // ★ ここで PUT メソッドに変更するわよ！
                         .cookie(new Cookie("jwt", mockToken))
                         .requestAttr("userId", userId)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(mapper.writeValueAsString(request)))
+                        .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title").value("更新後のタイトル"));
     }
@@ -206,14 +223,18 @@ class WorkControllerTest {
         String mockToken = "valid-token";
         when(jwtUtil.validateToken(mockToken)).thenReturn(new AuthCheckResponse(userId, mockToken));
 
-        WorkUpdateRequest invalidRequest = new WorkUpdateRequest();
-        invalidRequest.setTitle("");
+        MockMultipartFile mockFile = new MockMultipartFile(
+                "file", "test.png", MediaType.IMAGE_PNG_VALUE, "dummy".getBytes()
+        );
 
-        mockMvc.perform(put("/api/admin/works/{id}", workId)
+        mockMvc.perform(multipart("/api/admin/works/{id}", workId)
+                        .file(mockFile)
+                        .param("title", "") // タイトルを空にしてバリデーションエラーを起こすわ
+                        .param("description", "説明文")
+                        .with(request -> { request.setMethod("PUT"); return request; })
                         .cookie(new Cookie("jwt", mockToken))
                         .requestAttr("userId", userId)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(mapper.writeValueAsString(invalidRequest)))
+                        .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value("VALIDATION_ERROR"));
     }
@@ -226,18 +247,21 @@ class WorkControllerTest {
         String mockToken = "valid-token";
         when(jwtUtil.validateToken(mockToken)).thenReturn(new AuthCheckResponse(userId, mockToken));
 
-        WorkUpdateRequest validRequest = new WorkUpdateRequest();
-        validRequest.setTitle("バリデーション通るタイトル");
-        validRequest.setDescription("バリデーション通る説明");
+        MockMultipartFile mockFile = new MockMultipartFile(
+                "file", "test.png", MediaType.IMAGE_PNG_VALUE, "dummy".getBytes()
+        );
 
         when(adminWorkService.updateWork(eq(otherWorkId), any(), eq(userId)))
                 .thenThrow(new ResponseStatusException(HttpStatus.FORBIDDEN, "他人のデータは操作できません"));
 
-        mockMvc.perform(put("/api/admin/works/{id}", otherWorkId)
+        mockMvc.perform(multipart("/api/admin/works/{id}", otherWorkId)
+                        .file(mockFile)
+                        .param("title", "バリデーション通るタイトル")
+                        .param("description", "バリデーション通る説明")
+                        .with(request -> { request.setMethod("PUT"); return request; })
                         .cookie(new Cookie("jwt", mockToken))
                         .requestAttr("userId", userId)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(mapper.writeValueAsString(validRequest)))
+                        .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().isForbidden());
     }
 
@@ -249,26 +273,35 @@ class WorkControllerTest {
         String mockToken = "valid-token";
         when(jwtUtil.validateToken(mockToken)).thenReturn(new AuthCheckResponse(userId, mockToken));
 
-        WorkUpdateRequest validRequest = new WorkUpdateRequest();
-        validRequest.setTitle("バリデーション通るタイトル");
-        validRequest.setDescription("バリデーション通る説明");
+        MockMultipartFile mockFile = new MockMultipartFile(
+                "file", "test.png", MediaType.IMAGE_PNG_VALUE, "dummy".getBytes()
+        );
 
         when(adminWorkService.updateWork(eq(missingId), any(), eq(userId))).thenReturn(null);
 
-        mockMvc.perform(put("/api/admin/works/{id}", missingId)
+        mockMvc.perform(multipart("/api/admin/works/{id}", missingId)
+                        .file(mockFile)
+                        .param("title", "バリデーション通るタイトル")
+                        .param("description", "バリデーション通る説明")
+                        .with(request -> { request.setMethod("PUT"); return request; })
                         .cookie(new Cookie("jwt", mockToken))
                         .requestAttr("userId", userId)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(mapper.writeValueAsString(validRequest)))
+                        .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     @DisplayName("クッキーがない場合に更新を拒否し401を返すこと")
     void shouldReturn401WhenNoCookieOnUpdate() throws Exception {
-        mockMvc.perform(put("/api/admin/works/{id}", 10L)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(mapper.writeValueAsString(new WorkUpdateRequest())))
+        MockMultipartFile mockFile = new MockMultipartFile(
+                "file", "test.png", MediaType.IMAGE_PNG_VALUE, "dummy".getBytes()
+        );
+
+        mockMvc.perform(multipart("/api/admin/works/{id}", 10L)
+                        .file(mockFile)
+                        .param("title", "タイトル")
+                        .with(request -> { request.setMethod("PUT"); return request; })
+                        .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().isUnauthorized());
     }
 

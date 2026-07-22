@@ -20,6 +20,7 @@ public class WorkService {
     private final WorkMapper workMapper;
     private final WorkEntityMapper workEntityMapper;
     private final AuthUtils authUtils;
+    private final S3StorageService s3StorageService;
 
     public List<Work> getAllWorks(Long userId) {
         return workMapper.findAllByUserId(userId);
@@ -38,6 +39,12 @@ public class WorkService {
     public WorkResponse createWork(WorkCreateRequest request, Long userId) {
         Work entity = workEntityMapper.toEntity(request);
         entity.setUserId(userId);
+
+        if(request.getFile() != null && !request.getFile().isEmpty()){
+            String s3Key = s3StorageService.uploadFile(request.getFile(), "portfolio","work");
+            entity.setUrl(s3Key);
+        }
+
         workMapper.insert(entity);
         Work work = workMapper.findById(entity.getId());
         return workEntityMapper.toResponse(work);
@@ -54,6 +61,13 @@ public class WorkService {
         Work entity = workEntityMapper.toEntity(request);
         entity.setId(id);
         entity.setUserId(userId);
+
+        if(request.getFile() != null && !request.getFile().isEmpty()){
+            String s3Key = s3StorageService.uploadFile(request.getFile(),"portfolio","work");
+            entity.setUrl(s3Key);
+        }else{
+            entity.setUrl(existingWork.getUrl());
+        }
 
         workMapper.update(entity);
         Work work = workMapper.findById(entity.getId());

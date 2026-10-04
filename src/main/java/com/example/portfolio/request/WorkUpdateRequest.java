@@ -3,6 +3,7 @@ package com.example.portfolio.request;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class WorkUpdateRequest {
@@ -18,6 +19,6 @@ public class WorkUpdateRequest {
     @Size(max = 255, message = "タグは255文字以内で入力してください")
     private String techStack;
 
-    @Size(max = 255, message = "画像URLは255文字以内で入力してください")
-    private String url;
+    // 成果物画像
+    private MultipartFile file;
 }

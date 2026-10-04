@@ -23,6 +23,8 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             cd ~/portfolio/backend/blog-backend/
+            # 前回のデプロイで付与された実行権限など、スクリプトのローカル変更を戻す
+            git restore deploy_prod.sh
             git pull origin main
             if [ -f deploy_prod.sh ]; then
               chmod +x deploy_prod.sh

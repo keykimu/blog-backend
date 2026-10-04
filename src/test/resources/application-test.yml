@@ -9,4 +9,8 @@ minio:
   endpoint: http://localhost:9000
   access-key: minioadmin
   secret-key: minioadmin
-  bucket-name: test-storage
+
+storage:
+  s3:
+    bucket-name: test-storage
+    region: ap-northeast-1

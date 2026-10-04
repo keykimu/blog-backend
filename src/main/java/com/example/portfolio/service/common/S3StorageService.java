@@ -17,7 +17,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class S3StorageService {
     private final S3Client s3Client;
-    @Value("${minio.bucket-name}")
+    @Value("${storage.s3.bucket-name}")
     private String bucketName;
 
     public String uploadFile(MultipartFile file, String projectName, String screenName){
@@ -46,7 +46,7 @@ public class S3StorageService {
 
             return objectKey;
         }catch(IOException e){
-            throw new RuntimeException("S3(MinIO)へのファイルアップロードに失敗しました",e);
+            throw new RuntimeException("オブジェクトストレージへのファイルアップロードに失敗しました",e);
         }
     }
 }

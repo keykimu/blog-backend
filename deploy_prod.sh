@@ -8,13 +8,12 @@ cd /home/ec2-user/portfolio/backend/blog-backend/
 git pull origin main
 
 echo "Cleaning up old docker resources to save space..."
-# 実行中でないコンテナと、タグのない古いイメージ（ビルドキャッシュ等）を削除
-# DBのボリューム（データ）は守りつつ、容量を確保
-docker image prune -f
+# タグの有無にかかわらず、どのコンテナからも参照されていないイメージを削除
+# 実行中コンテナが使うイメージと DB ボリュームは削除されない
+docker image prune -af
 
-# 古いビルドキャッシュを削除
-# 直近24時間以内のキャッシュは残して高速化しつつ、古いゴミだけ消す
-docker builder prune -f --filter "until=24h"
+# 未使用のビルドキャッシュをすべて削除
+docker builder prune -af
 
 # AWS Parameter Store から機密情報を取得
 # AWS CLI を使ってSecureStringパラメータを復号化して取得
@@ -65,7 +64,8 @@ fi
 echo "Building and Deploying with Docker Compose..."
 docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build --remove-orphans
 
-# ビルドが終わって不要になった中間イメージを再度掃除
-docker image prune -f
+# ビルド後に不要になったイメージとビルドキャッシュを再度削除
+docker image prune -af
+docker builder prune -af
 
 echo "Deployment completed! Secured by Self-signed cert & Cloudflare."
